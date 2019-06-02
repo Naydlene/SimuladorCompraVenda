@@ -32,17 +32,22 @@ public class Produto {
 		this.qtde_estoque = qtde_estoque;
 	}
 	//construtor
-	Produto(Categoria categoria, int id, String nome, double precoVenda, double qtde_estoque){
+	public Produto(Categoria categoria, int id, String nome, double precoVenda, double qtde_estoque){
+		this.id = id;
 		this.categoria = categoria;
 		this.nome = nome;
 		this.precoVenda = precoVenda;
 		this.qtde_estoque = qtde_estoque;
 	}
-	public Produto(String codCategoria, String nome2, double preco, double qtde_estoque2) {
-		// TODO Auto-generated constructor stub
+	
+	public Categoria getCategoria() {
+		return categoria;
+	}
+	public void setCategoria(Categoria categoria) {
+		this.categoria = categoria;
 	}
 	public String dadosProdutos(){
-		String retorno = "Categoria: " + this.categoria + "Nome: " + this.nome + "Preco Venda: " + this.precoVenda + "Quantidade no estoque: " + this.qtde_estoque;
+		String retorno = "Código do produto: " + this.id + " Categoria: " + this.categoria.getDescricao() + " Nome: " + this.nome + " Preco Venda: " + this.precoVenda + " Quantidade no estoque: " + this.qtde_estoque;
 		return retorno;
 	}
 
