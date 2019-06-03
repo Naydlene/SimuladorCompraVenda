@@ -50,62 +50,88 @@ public class Main {
 					ListProdutos.add(cadastrarProduto(ListCategorias, ListProdutos));
 				} else if (opcao2 == 3) {
 					alterarProduto(ListProdutos, ListCategorias);
-				}break;
+				}else {
+					System.out.println("Informe uma opção válida.");
+				}
+				break;
 				
 			case 2:
-				ListCategorias.add(cadastrarCategoria(ListCategorias));
+				// (listagem, inserção e alteração);
+				int opcao3 = 0;
+				String strOpcao3;
+				System.out.println("1 - Listagem de categorias.\n 2 - Inserção de categorias. \n 3 - Alteração de categorias.");
+				strOpcao3 = input.nextLine();
+				try {
+					opcao3 = Integer.parseInt(strOpcao3);
+				} catch (Exception e) {
+					System.err.println("Opção inexistente.");
+				}
+				if(opcao3 == 1) {
+					exibirListaCategorias(ListCategorias);
+				}else if(opcao3 == 2) {
+					ListCategorias.add(cadastrarCategoria(ListCategorias));
+				}else if(opcao3 == 3){
+					alterarCategoria(ListCategorias);
+				}else {
+					System.out.println("Opção inexistente.");
+				}
+				
 				break;
 			case 3:
-				int opcao3 = 0;
-				String stropcao3;
+				// (listagem, inserção e alteração);
+				int opcao4 = 0;
+				String stropcao4;
 				System.out.println("1 - Cadastrar pessoa física.\n" + "2 - Cadastrar pessoa jurídica");
-				stropcao3 = input.nextLine();
+				stropcao4 = input.nextLine();
 				try {
-					opcao3 = Integer.parseInt(stropcao3);
+					opcao4 = Integer.parseInt(stropcao4);
 				} catch (Exception e) {
 					System.err.println("Opção inválida.");
 				}
 
-				if (opcao3 == 1) {
-					ListPessoaFisica.add(cadastrarPessoaFisica());
-				} else if (opcao3 == 2) {
-					ListPessoaJuridica.add(cadastrarPessoaJuridica());
-				} else {
-					System.err.println("Digite a informação correta.");
+				if (opcao4 == 1) {
+					int opcao5 = 0;
+					String strOpcao5;
+					System.out.println("1 - Listagem de pessoas físicas.\n 2 - Inserção de pessoas físicas. \n 3 - Alteração de pessoas físicas.");
+					strOpcao5 = input.nextLine();
+					try {
+						opcao5 = Integer.parseInt(strOpcao5);
+					} catch (Exception e) {
+						System.err.println("Opção inexistente.");
+					}
+						if(opcao5 == 1) {
+							exibirListaPessoaFisica(ListPessoaFisica);
+						}else if(opcao5 == 2) {
+							ListPessoaFisica.add(cadastrarPessoaFisica());
+						} else if (opcao5 == 3) {
+							alterarPessoaFisica(ListPessoaFisica);
+						} else {
+							System.err.println("Digite a informação correta.");
 				}
 				break;
+				}
 			}
-
 		} while (opcao != 0);
+		
 
 	}
 
 	static public Produto cadastrarProduto(ArrayList<Categoria> ListCategorias, ArrayList<Produto> ListProdutos) {
 		int id;
 		Categoria categoriaSelecionada;
-		//Categoria categoria;
-		// (listagem, inserção e alteração);
-		// printar lista de categorias
-		/*do {
-
+		
+		do {
 			if (!exibirListaCategorias(ListCategorias))
 				return null;
-
-			System.out.println("Informe o código da categoria do produto: ");
-			codCategoria = input.nextLine();
-			codCategoriaInt = Integer.parseInt(codCategoria);
-		} while (!confirmarCategoria(ListCategorias, codCategoriaInt));*/
-		do {
-			if(!exibirListaCategorias(ListCategorias))
-				return null;
 			id = digitarNumero("Informe o  código da categoria: ", "Informe o código correto.");
-		}while(!confirmarCategoria(ListCategorias, id));
+		} while (!confirmarCategoria(ListCategorias, id));
 		categoriaSelecionada = retornarCategoria(ListCategorias, id);
 
 		System.out.println("Informe o nome do produto: ");
 		String nome = input.nextLine();
 		double preco = numeroDouble("Informe o preço do produto: ", "Preço do produto inválido.");
-		double qtde_estoque = numeroDouble("Informe a quantidade de estoque do produto: ","Quantidade de estoque inválida.");
+		double qtde_estoque = numeroDouble("Informe a quantidade de estoque do produto: ",
+				"Quantidade de estoque inválida.");
 		Produto produto = new Produto(categoriaSelecionada, ListProdutos.size() + 1, nome, preco, qtde_estoque);
 		return produto;
 	}
@@ -147,26 +173,27 @@ public class Main {
 		return pessoaFisica;
 
 	}
+
 	static private boolean ehApenasNumero(String digitado, String fraseErro) {
-		
+
 		try {
 			int n = Integer.parseInt(digitado);
-		}catch(Exception e) {
+		} catch (Exception e) {
 			System.out.println(fraseErro);
 			return false;
 		}
-		
-		return true;	
+
+		return true;
 	}
+
 	static public String digitarStrApenasNumero(String frase, String fraseErro) {
 		String strDigitado;
 		do {
 			System.out.println(frase);
 			strDigitado = input.nextLine();
-		} while (!ehApenasNumero(strDigitado,fraseErro));
+		} while (!ehApenasNumero(strDigitado, fraseErro));
 		return strDigitado;
 	}
-
 
 	// METODO PUBLICO ESTATICO INTEIRO CHAMADO DE: DIGITARNUMERO, E RECEBE FRASE E
 	// FRASEERRO COMO PARAMETRO.
@@ -217,33 +244,48 @@ public class Main {
 	}
 
 	static public PessoaJuridica cadastrarPessoaJuridica() {
-		
+
 		boolean tudoOk;
 		String nome, rua, strnum, cep, bairro, complemento, cidade, estado, email, telefone, celular, cnpj;
-			System.out.println("Informe o seu nome ou o nome da sua empresa: ");
-			nome = input.nextLine();
-			System.out.println("Informe o nome da sua rua: ");
-			rua = input.nextLine();
-			int intnum = digitarNumero("Informe o número da residência: ", "Número inválido.");
-			cep = digitarStrApenasNumero("Informe o cep: ", "Número do CEP incorreto.");
-			System.out.println("Informe o Bairro: ");
-			bairro = input.nextLine();
-			System.out.println("Informe o complemento: ");
-			complemento = input.nextLine();
-			System.out.println("Informe a cidade: ");
-			cidade = input.nextLine();
-			System.out.println("Informe o estado: ");
-			estado = input.nextLine();
-			System.out.println("Informe o seu e-mail");
-			email = input.nextLine();
-			telefone = digitarStrApenasNumero("Informe o número do seu telefone fixo: ", "Número do telefone inválido.");
-			celular = digitarStrApenasNumero("Informe o número do seu celular: ", "Número do celular inválido.");
-			cnpj = digitarStrApenasNumero("Informe o seu CNPJ: ", "Número do CNPJ inválido.");
-	
+		System.out.println("Informe o seu nome ou o nome da sua empresa: ");
+		nome = input.nextLine();
+		System.out.println("Informe o nome da sua rua: ");
+		rua = input.nextLine();
+		int intnum = digitarNumero("Informe o número da residência: ", "Número inválido.");
+		cep = digitarStrApenasNumero("Informe o cep: ", "Número do CEP incorreto.");
+		System.out.println("Informe o Bairro: ");
+		bairro = input.nextLine();
+		System.out.println("Informe o complemento: ");
+		complemento = input.nextLine();
+		System.out.println("Informe a cidade: ");
+		cidade = input.nextLine();
+		System.out.println("Informe o estado: ");
+		estado = input.nextLine();
+		System.out.println("Informe o seu e-mail");
+		email = input.nextLine();
+		telefone = digitarStrApenasNumero("Informe o número do seu telefone fixo: ", "Número do telefone inválido.");
+		celular = digitarStrApenasNumero("Informe o número do seu celular: ", "Número do celular inválido.");
+		cnpj = digitarStrApenasNumero("Informe o seu CNPJ: ", "Número do CNPJ inválido.");
+
 		Endereco endereco = new Endereco(rua, cep, bairro, intnum, complemento, cidade, estado);
 		PessoaJuridica pessoaJuridica = new PessoaJuridica(endereco, nome, email, telefone, celular, cnpj);
 		return pessoaJuridica;
 
+	}
+
+	static private boolean exibirListaPessoaFisica(ArrayList<PessoaFisica> ListPessoaFisica) {
+
+		// se o tamanho da lista for 0, retorna falso.
+		if (ListPessoaFisica.size() == 0) {
+			System.err.println("Lista de pessoa fisica vazia.");
+			return false;
+		}
+		for (PessoaFisica f : ListPessoaFisica) {
+			System.out.println("Pessoa Física: ");
+			// o c vai referenciar cada elemento na lista, um de cada vez.
+			System.out.println(f.dadosPessoaFisica());
+		}
+		return true;
 	}
 
 	static private boolean exibirListaCategorias(ArrayList<Categoria> ListCategorias) {
@@ -275,6 +317,18 @@ public class Main {
 		return true;
 	}
 
+	static private boolean confirmarPessoaFisica(ArrayList<PessoaFisica> ListPessoaFisica, int idFisica) {
+
+		for (PessoaFisica f : ListPessoaFisica) {
+			if (f.getId() == idFisica)
+				return true;
+		}
+		System.err
+				.println("Você digitou o código errado, digite o código certo. Se não existir, você poderá criá - lo.");
+		return false;
+
+	}
+
 	static private boolean confirmarCategoria(ArrayList<Categoria> ListCategorias, int codCategoria) {
 
 		for (Categoria c : ListCategorias) {
@@ -299,6 +353,14 @@ public class Main {
 
 	}
 
+	static private PessoaFisica retornarPessoaFisica(ArrayList<PessoaFisica> ListPessoaFisica, int idFisica) {
+		for (PessoaFisica f : ListPessoaFisica) {
+			if (f.getId() == idFisica)
+				return f;
+		}
+		return null;
+	}
+
 	static private Produto retornarProduto(ArrayList<Produto> ListProdutos, int cod) {
 		for (Produto p : ListProdutos) {
 			if (p.getId() == cod)
@@ -306,10 +368,12 @@ public class Main {
 		}
 		return null;
 	}
+
 	static private Categoria retornarCategoria(ArrayList<Categoria> ListCategorias, int codCategoria) {
 		for (Categoria c : ListCategorias) {
 			if (c.getId() == codCategoria)
 				return c;
+
 		}
 		return null;
 	}
@@ -319,57 +383,170 @@ public class Main {
 		Produto produtoSelecionado;
 		Categoria categoriaSelecionada;
 		exibirListaProdutos(ListProdutos);
-		
+
 		do {
 			cod = digitarNumero("Informe o código do produto que vc deseja alterar: ", "Informe o código correto.");
-		}while(!confirmarProduto(ListProdutos, cod));
+		} while (!confirmarProduto(ListProdutos, cod));
 		produtoSelecionado = retornarProduto(ListProdutos, cod);
 		System.out.println("Você selecionou o produto:");
 		System.out.println(produtoSelecionado.dadosProdutos());
 		System.out.println("O que deseja alterar nesse produto?");
 		do {
-			int info = digitarNumero("Digite:\n 1 - Categoria. \n 2 - nome\n 3 - precoVenda\n 4 - qtde_estoque", "Informação incorreta.");
+			int info = digitarNumero("Digite:\n 1 - Categoria. \n 2 - nome\n 3 - precoVenda\n 4 - qtde_estoque",
+					"Informação incorreta.");
 			if (info == 1) {
-				int novoCod; 
+				int novoCod;
 				do {
-					if(!exibirListaCategorias(ListCategorias))
+					if (!exibirListaCategorias(ListCategorias))
 						return;
 					novoCod = digitarNumero("Informe o novo código da categoria", "Informe o código correto.");
-				}while(!confirmarCategoria(ListCategorias, novoCod));
+				} while (!confirmarCategoria(ListCategorias, novoCod));
 				categoriaSelecionada = retornarCategoria(ListCategorias, novoCod);
 				System.out.println("Você selecionou a categoria: ");
 				System.out.println(categoriaSelecionada.dadosCategoria());
 				produtoSelecionado.setCategoria(categoriaSelecionada);
-				
-			}else if (info == 2) {
+
+			} else if (info == 2) {
 				String novoNome;
 				System.out.println("Informe o novo nome para o produto: ");
 				novoNome = input.nextLine();
 				produtoSelecionado.setNome(novoNome);
-			}else if (info == 3) {
+			} else if (info == 3) {
 				double newprecoVenda = numeroDouble("Informe o novo preço do produto: ", "Informação inválida");
 				produtoSelecionado.setPrecoVenda(newprecoVenda);
-			}else if(info == 4) {
-				double newqtde_estoque = numeroDouble("Informe a quantidade de estoque do produto: ", "Informação inválida");
+			} else if (info == 4) {
+				double newqtde_estoque = numeroDouble("Informe a quantidade de estoque do produto: ",
+						"Informação inválida");
 				produtoSelecionado.setQtde_estoque(newqtde_estoque);
 			}
-		
-		}while (perguntaSimNao("Deseja alterar mais coisas? \n1 - sim. \n2 - não.", "Informação inválida"));
-			
+
+		} while (perguntaSimNao("Deseja alterar mais coisas? \n1 - sim. \n2 - não.", "Informação inválida"));
+
 	}
+
 	static private boolean perguntaSimNao(String frase, String fraseErro) {
 		int simNao;
-		do{
+		do {
 			simNao = digitarNumero(frase, fraseErro);
-			if(simNao != 1 && simNao != 2) {
+			if (simNao != 1 && simNao != 2) {
 				System.out.println("Opção inválida.");
 			}
-		}while(simNao != 1 && simNao != 2);
-		
-		if(simNao==1)
+		} while (simNao != 1 && simNao != 2);
+
+		if (simNao == 1)
 			return true;
 		else
 			return false;
+
+	}
+
+	static private void alterarCategoria(ArrayList<Categoria> ListCategorias) {
+		int cod;
+		String novaDescricao;
+		Categoria categoriaSelecionada;
+		do {
+			if (!exibirListaCategorias(ListCategorias))
+				return;
+
+			cod = digitarNumero("Informe o código da categoria que vc deseja alterar: ", "Informe o código correto.");
+		} while (!confirmarCategoria(ListCategorias, cod));
+		System.out.println("Você selecionou a categoria: ");
+		categoriaSelecionada = retornarCategoria(ListCategorias, cod);
+		System.out.println(categoriaSelecionada.dadosCategoria());
+		System.out.println("Informe a nova descrição: ");
+		novaDescricao = input.nextLine();
+		categoriaSelecionada.setDescricao(novaDescricao);
+
+		return;
+	}
+
+	static private void alterarPessoaFisica(ArrayList<PessoaFisica> ListPessoaFisica) {
+		int idFisica;
+		PessoaFisica pessoaFisicaSelecionada;
+		Endereco enderecoAux;
+		do {
+			if(!exibirListaPessoaFisica(ListPessoaFisica))
+				return;
 		
+			idFisica = digitarNumero("Informe o código da pessoa que você deseja alterar: ", "Informe o código correto.");
+		}while(!confirmarPessoaFisica(ListPessoaFisica, idFisica));
+		pessoaFisicaSelecionada = retornarPessoaFisica(ListPessoaFisica, idFisica);
+		System.out.println("Você selecionou a pessoa: ");
+		System.out.println(pessoaFisicaSelecionada.dadosPessoaFisica());
+		System.out.println("O que deseja alterar nesta pessoa?");
+		/*super(endereco, nome, email, telefone, celular);
+		this.cpf = cpf;*/
+		do {
+			int numFis = digitarNumero("Digite:\n 1 - Nome. \n 2 - Endereço.\n 3 - E-mail.\n 4 - Telefone.\n 5 - Celular.\n 6 - CPF.", "Informação incorreta.");
+			if (numFis == 1) {
+							
+					String nome;
+					System.out.println("Informe o nome que deseja: ");
+					nome = input.nextLine();
+					pessoaFisicaSelecionada.setNome(nome);
+				
+				
+			}else if (numFis == 2) {
+				int escolha;
+				String rua;
+				int numEnde;
+				String cepEnde;
+				String bairroEnde;
+				String cidadeEnde;
+				String estadoEnde;
+				String complementoEnde;
+				do {
+					escolha = digitarNumero("Informe o que você deseja alterar:\n1 - Rua. \n2 -Número. \n3 - CEP. \n4 - Bairro. \n 5 - Cidade. \n6 - Estado. \n7 - Complemento.","Informação inválida");
+					enderecoAux = pessoaFisicaSelecionada.getEndereco();
+					if(escolha == 1) {
+						System.out.println("Informe o nome da rua: ");
+						rua = input.nextLine();
+						enderecoAux.setRua(rua);
+					}else if(escolha == 2) {
+						numEnde = digitarNumero("Informe o número: ", "Informação inválida");
+						enderecoAux.setNum(numEnde);
+					}else if(escolha == 3) {
+						cepEnde = digitarStrApenasNumero("Informe o CEP: ", "Informação inválida");
+						enderecoAux.setCep(cepEnde);
+					}else if(escolha == 4) {
+						System.out.println("Informe o bairro: ");
+						bairroEnde = input.nextLine();
+						enderecoAux.setBairro(bairroEnde);
+					}else if(escolha == 5) {
+						System.out.println("Informe a cidade: ");
+						cidadeEnde = input.nextLine();
+						enderecoAux.setCidade(cidadeEnde);
+					}else if (escolha == 6) {
+						System.out.println("Informe o estado: ");
+						estadoEnde = input.nextLine();
+						enderecoAux.setEstado(estadoEnde);
+					}else if(escolha == 7) {
+						System.out.println("Informe o complemento: ");
+						complementoEnde = input.nextLine();
+						enderecoAux.setComplemento(complementoEnde);
+					}
+					}while(perguntaSimNao("Deseja alterar mais coisas? \n1 - sim. \n2 - não.", "Informação inválida"));
+				}
+			else if(numFis == 3) {
+				String novoEmail;
+				novoEmail = digitarStrApenasNumero("Informe o e-mail: ", "Informação inválida");
+				pessoaFisicaSelecionada.setEmail(novoEmail);
+			}else if(numFis == 4) {
+				String novoTelefone;
+				novoTelefone = digitarStrApenasNumero("Informe o número do telefone: ", "Informação inválida");
+				pessoaFisicaSelecionada.setTelefone(novoTelefone);
+			}else if(numFis == 5) {
+				String novoCelular;
+				novoCelular = digitarStrApenasNumero("Informe o número do celular: ", "Informação inválida");
+				pessoaFisicaSelecionada.setCelular(novoCelular);
+			}else if(numFis == 6) {
+				String novoCpf;
+				novoCpf = digitarStrApenasNumero("Informe o número do CPF: ", "Informação inválida");
+				pessoaFisicaSelecionada.setCpf(novoCpf);
+			}else {
+				System.out.println("Opção inválida.");
+			}
+		}while(perguntaSimNao("Deseja alterar mais coisas? \n1 - sim. \n2 - não.","Informação inválida"));
 	}
 }
+

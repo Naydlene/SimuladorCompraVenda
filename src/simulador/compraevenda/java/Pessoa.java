@@ -16,7 +16,17 @@ public class Pessoa {
 		this.nome = nome;
 		this.email = email;
 	}
+	public String dadosPessoa(){
+		String retorno = " Nome: " + this.nome + endereco.dadosEndereco() + " Email: " + this.email + " Telefone: " + this.telefone + " Celular: " + this.celular; 
+		return retorno;
+	}
 	
+	public Endereco getEndereco() {
+		return endereco;
+	}
+	public void setEndereco(Endereco endereco) {
+		this.endereco = endereco;
+	}
 	public int getId() {
 		return id;
 	}
