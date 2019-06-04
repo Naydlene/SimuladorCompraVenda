@@ -1,23 +1,26 @@
 package simulador.compraevenda.java;
 
 public class Pessoa {
+	private int id;
 	private Endereco endereco;
 	private String nome;
 	private String email;
 	private String telefone;
 	private String celular;
-	private int id;
+
 	
 	
-	public Pessoa(Endereco endereco, String nome, String email, String telefone, String celular) {
+	public Pessoa( int id,Endereco endereco, String nome, String email, String telefone, String celular) {
+		this.id = id;
 		this.endereco = endereco;
 		this.telefone = telefone;
 		this.celular = celular;
 		this.nome = nome;
 		this.email = email;
+		
 	}
 	public String dadosPessoa(){
-		String retorno = " Nome: " + this.nome + endereco.dadosEndereco() + " Email: " + this.email + " Telefone: " + this.telefone + " Celular: " + this.celular; 
+		String retorno = "Código: " + id + " Nome: " + this.nome + endereco.dadosEndereco() + " Email: " + this.email + " Telefone: " + this.telefone + " Celular: " + this.celular; 
 		return retorno;
 	}
 	
