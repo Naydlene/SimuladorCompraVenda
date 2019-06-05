@@ -1,6 +1,7 @@
 package simulador.compraevenda.java;
 
 public class Produto {
+	private Fornecedores fornecedores;
 	private Categoria categoria;
 	private int id;
 	private String nome;
@@ -12,6 +13,12 @@ public class Produto {
 	}
 	public void setId(int id) {
 		this.id = id;
+	}
+	public Fornecedores getFornecedores() {
+		return fornecedores;
+	}
+	public void setFornecedores(Fornecedores fornecedores) {
+		this.fornecedores = fornecedores;
 	}
 	public String getNome() {
 		return nome;
@@ -32,7 +39,8 @@ public class Produto {
 		this.qtde_estoque = qtde_estoque;
 	}
 	//construtor
-	public Produto(Categoria categoria, int id, String nome, double precoVenda, double qtde_estoque){
+	public Produto( Categoria categoria, int id, Fornecedores fornecedores, String nome, double precoVenda, double qtde_estoque){
+		this.fornecedores = fornecedores;
 		this.id = id;
 		this.categoria = categoria;
 		this.nome = nome;
@@ -47,7 +55,7 @@ public class Produto {
 		this.categoria = categoria;
 	}
 	public String dadosProdutos(){
-		String retorno = "Código do produto: " + this.id + " Categoria: " + this.categoria.getDescricao() + " Nome: " + this.nome + " Preco Venda: " + this.precoVenda + " Quantidade no estoque: " + this.qtde_estoque;
+		String retorno = "Código do produto: " + this.id + " Fornecedor: " +fornecedores.getNome() + " Categoria: " + this.categoria.getDescricao() + " Nome: " + this.nome + " Preco Venda: " + this.precoVenda + " Quantidade no estoque: " + this.qtde_estoque;
 		return retorno;
 	}
 

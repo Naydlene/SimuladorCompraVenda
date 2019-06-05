@@ -18,7 +18,7 @@ public class Main {
 		String stropcao;
 		int opcao = 0;
 		do {
-			System.out.println("\nDigite: 1 - Cadastrar produtos.\n " + "2 - Cadastrar categorias.\n "
+			System.out.println("\nDigite: \n 1 - Cadastrar produtos.\n " + "2 - Cadastrar categorias.\n "
 					+ "3 - Cadastrar clientes.\n " + "4 - Cadastrar fornecedores.\n " + "5 - Efetuar compras.\n "
 					+ "6 - Efetuar venda.\n " + "7 - Gerar relatórios de vendas por intervalos de datas.\n "
 					+ "8 - Visualizar compras anteriores de um dado cliente.\n "
@@ -49,9 +49,9 @@ public class Main {
 					// exibir lista de produtos.
 					exibirListaProdutos(ListProdutos);
 				} else if (opcao2 == 2) {
-					ListProdutos.add(cadastrarProduto(ListCategorias, ListProdutos));
+					ListProdutos.add(cadastrarProduto(ListCategorias,ListFornecedores, ListProdutos));
 				} else if (opcao2 == 3) {
-					alterarProduto(ListProdutos, ListCategorias);
+					alterarProduto(ListProdutos, ListCategorias,ListFornecedores);
 				} else {
 					System.out.println("Informe uma opção válida.");
 				}
@@ -165,9 +165,11 @@ public class Main {
 		} while (opcao != 0);
 	}
 
-	static public Produto cadastrarProduto(ArrayList<Categoria> ListCategorias, ArrayList<Produto> ListProdutos) {
+	static public Produto cadastrarProduto(ArrayList<Categoria> ListCategorias, ArrayList<Fornecedores> ListFornecedores,ArrayList<Produto> ListProdutos) {
 		int id;
+		int codFornecedor;
 		Categoria categoriaSelecionada;
+		Fornecedores fornecedorSelec;
 
 		do {
 			if (!exibirListaCategorias(ListCategorias))
@@ -178,10 +180,16 @@ public class Main {
 
 		System.out.println("Informe o nome do produto: ");
 		String nome = input.nextLine();
+		do {
+			if(!exibirListaFornecedores(ListFornecedores))
+				return null;
+			codFornecedor = digitarNumero("Informe o código do fornecedor: ", "Informe o código correto");
+		}while(!confirmarFornecedores(ListFornecedores, codFornecedor));
+		fornecedorSelec = retornarFornecedores(ListFornecedores, codFornecedor);
 		double preco = numeroDouble("Informe o preço do produto: ", "Preço do produto inválido.");
 		double qtde_estoque = numeroDouble("Informe a quantidade de estoque do produto: ",
 				"Quantidade de estoque inválida.");
-		Produto produto = new Produto(categoriaSelecionada, ListProdutos.size() + 1, nome, preco, qtde_estoque);
+		Produto produto = new Produto(categoriaSelecionada,  ListProdutos.size() + 1, fornecedorSelec,nome, preco, qtde_estoque);
 		return produto;
 	}
 
@@ -532,11 +540,13 @@ public class Main {
 		return null;
 	}
 
-	static private void alterarProduto(ArrayList<Produto> ListProdutos, ArrayList<Categoria> ListCategorias) {
+	static private void alterarProduto(ArrayList<Produto> ListProdutos, ArrayList<Categoria> ListCategorias,ArrayList<Fornecedores> ListFornecedores) {
 		int cod;
 		Produto produtoSelecionado;
 		Categoria categoriaSelecionada;
+		Fornecedores fornecedorSelecionado;
 		exibirListaProdutos(ListProdutos);
+		exibirListaFornecedores(ListFornecedores);
 
 		do {
 			cod = digitarNumero("Informe o código do produto que vc deseja alterar: ", "Informe o código correto.");
@@ -546,7 +556,7 @@ public class Main {
 		System.out.println(produtoSelecionado.dadosProdutos());
 		System.out.println("O que deseja alterar nesse produto?");
 		do {
-			int info = digitarNumero("Digite:\n 1 - Categoria. \n 2 - nome\n 3 - precoVenda\n 4 - qtde_estoque",
+			int info = digitarNumero("Digite:\n 1 - Categoria.\n 2 - Fornecedor \n 3 - nome\n 4 - precoVenda\n 5 - qtde_estoque",
 					"Informação incorreta.");
 			if (info == 1) {
 				int novoCod;
@@ -560,15 +570,27 @@ public class Main {
 				System.out.println(categoriaSelecionada.dadosCategoria());
 				produtoSelecionado.setCategoria(categoriaSelecionada);
 
-			} else if (info == 2) {
+			}else if(info == 2) {
+				int novoFornecedor;
+				do {
+					if (!exibirListaFornecedores(ListFornecedores))
+						return;
+					novoFornecedor = digitarNumero("Informe o novo código do Fornecedor", "Informe o código correto.");
+				} while (!confirmarFornecedores(ListFornecedores, novoFornecedor));
+				fornecedorSelecionado = retornarFornecedores(ListFornecedores, novoFornecedor);
+				System.out.println("Você selecionou o fornecedor: ");
+				System.out.println(fornecedorSelecionado.dadosFornecedores());
+				produtoSelecionado.setFornecedores(fornecedorSelecionado);
+			}
+			else if (info == 3) {
 				String novoNome;
 				System.out.println("Informe o novo nome para o produto: ");
 				novoNome = input.nextLine();
 				produtoSelecionado.setNome(novoNome);
-			} else if (info == 3) {
+			} else if (info == 4) {
 				double newprecoVenda = numeroDouble("Informe o novo preço do produto: ", "Informação inválida");
 				produtoSelecionado.setPrecoVenda(newprecoVenda);
-			} else if (info == 4) {
+			} else if (info == 5) {
 				double newqtde_estoque = numeroDouble("Informe a quantidade de estoque do produto: ",
 						"Informação inválida");
 				produtoSelecionado.setQtde_estoque(newqtde_estoque);
