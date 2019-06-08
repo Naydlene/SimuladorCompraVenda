@@ -15,161 +15,221 @@ public class Main {
 		ArrayList<PessoaFisica> ListPessoaFisica = new ArrayList<>();
 		ArrayList<PessoaJuridica> ListPessoaJuridica = new ArrayList<>();
 		ArrayList<Fornecedores> ListFornecedores = new ArrayList<>();
+		ArrayList<Unidade> ListUnidade = new ArrayList<>();
+		ListUnidade.add(new Unidade(1, "UND (unidade"));
+		ListUnidade.add(new Unidade(2, "; M (metro)"));
+		ListUnidade.add(new Unidade(3, "KG (quilo)"));
+		ListUnidade.add(new Unidade(4, " L(litro)"));
+		/*
+		 * System.out.printf("Percorrendo o ArrayList (usando o índice)\n"); int n =
+		 * ListUnidade.size(); for (i=0; i<n; i++) {
+		 * System.out.printf("Posição %d- %s\n", i, agenda.get(i)); }
+		 */
+
 		String stropcao;
-		int opcao = 0;
-		do {
-			System.out.println("\nDigite: \n 1 - Cadastrar produtos.\n " + "2 - Cadastrar categorias.\n "
-					+ "3 - Cadastrar clientes.\n " + "4 - Cadastrar fornecedores.\n " + "5 - Efetuar compras.\n "
-					+ "6 - Efetuar venda.\n " + "7 - Gerar relatórios de vendas por intervalos de datas.\n "
-					+ "8 - Visualizar compras anteriores de um dado cliente.\n "
-					+ "9 - Calcular o consumo médio mensal de cada produto.\n 10 - ");
+		int opcao = 999;
+		try {
+			do {
+				System.out.println("\nDigite: \n 1 - Cadastrar produtos.\n " + "2 - Cadastrar categorias.\n "
+						+ "3 - Cadastrar clientes.\n " + "4 - Cadastrar fornecedores.\n " + "5 - Efetuar compras(abastecimento de estoque).\n "
+						+ "6 - Efetuar venda.\n " + "7 - Gerar relatórios de vendas por intervalos de datas.\n "
+						+ "8 - Visualizar compras anteriores de um dado cliente.\n "
+						+ "9 - Calcular o consumo médio mensal de cada produto.\n 10 - ");
 
-			stropcao = input.nextLine();
-			try {
-				opcao = Integer.parseInt(stropcao);
-			} catch (Exception e) {
-				System.err.println("Opção inválida.");
-			}
-
-			switch (opcao) {
-			case 1:
-				// (listagem, inserção e alteração);
-
-				int opcao2 = 0;
-				String stropcao2;
-				System.out
-						.println("1 - Listagem de produtos.\n 2 - Inserção de produtos. \n 3 - Alteração de produtos.");
-				stropcao2 = input.nextLine();
+				stropcao = input.nextLine();
 				try {
-					opcao2 = Integer.parseInt(stropcao2);
-				} catch (Exception e) {
-					System.err.println("Opção inválida.");
-				}
-				if (opcao2 == 1) {
-					// exibir lista de produtos.
-					exibirListaProdutos(ListProdutos);
-				} else if (opcao2 == 2) {
-					ListProdutos.add(cadastrarProduto(ListCategorias,ListFornecedores, ListProdutos));
-				} else if (opcao2 == 3) {
-					alterarProduto(ListProdutos, ListCategorias,ListFornecedores);
-				} else {
-					System.out.println("Informe uma opção válida.");
-				}
-				break;
-
-			case 2:
-				// (listagem, inserção e alteração);
-				int opcao3 = 0;
-				String strOpcao3;
-				System.out.println(
-						"1 - Listagem de categorias.\n 2 - Inserção de categorias. \n 3 - Alteração de categorias.");
-				strOpcao3 = input.nextLine();
-				try {
-					opcao3 = Integer.parseInt(strOpcao3);
-				} catch (Exception e) {
-					System.err.println("Opção inexistente.");
-				}
-				if (opcao3 == 1) {
-					exibirListaCategorias(ListCategorias);
-				} else if (opcao3 == 2) {
-					ListCategorias.add(cadastrarCategoria(ListCategorias));
-				} else if (opcao3 == 3) {
-					alterarCategoria(ListCategorias);
-				} else {
-					System.out.println("Opção inexistente.");
-				}
-
-				break;
-			case 3:
-				// (listagem, inserção e alteração);
-				int opcao4 = 0;
-				String stropcao4;
-				System.out.println("1 - Cadastrar pessoa física.\n" + "2 - Cadastrar pessoa jurídica");
-				stropcao4 = input.nextLine();
-				try {
-					opcao4 = Integer.parseInt(stropcao4);
+					opcao = Integer.parseInt(stropcao);
 				} catch (Exception e) {
 					System.err.println("Opção inválida.");
 				}
 
-				if (opcao4 == 1) {
-					int opcao5 = 0;
-					String strOpcao5;
+				switch (opcao) {
+				case 1:
+					// (listagem, inserção e alteração);
+
+					int opcao2 = 0;
+					String stropcao2;
 					System.out.println(
-							"1 - Listagem de pessoas físicas.\n 2 - Inserção de pessoas físicas. \n 3 - Alteração de pessoas físicas.");
-					strOpcao5 = input.nextLine();
+							"1 - Listagem de produtos.\n 2 - Inserção de produtos. \n 3 - Alteração de produtos.");
+					stropcao2 = input.nextLine();
 					try {
-						opcao5 = Integer.parseInt(strOpcao5);
+						opcao2 = Integer.parseInt(stropcao2);
 					} catch (Exception e) {
-						System.err.println("Opção inexistente.");
+						System.err.println("Opção inválida.");
 					}
-					if (opcao5 == 1) {
-						exibirListaPessoaFisica(ListPessoaFisica);
-					} else if (opcao5 == 2) {
-						ListPessoaFisica.add(cadastrarPessoaFisica(ListPessoaFisica));
-					} else if (opcao5 == 3) {
-						alterarPessoaFisica(ListPessoaFisica);
+					if (opcao2 == 1) {
+						// exibir lista de produtos.
+						exibirListaProdutos(ListProdutos);
+					} else if (opcao2 == 2) {
+						ListProdutos.add(cadastrarProduto(ListCategorias, ListFornecedores, ListProdutos, ListUnidade));
+					} else if (opcao2 == 3) {
+						alterarProduto(ListProdutos, ListCategorias, ListFornecedores);
 					} else {
-						System.err.println("Digite a informação correta.");
+						System.out.println("Informe uma opção válida.");
 					}
-				}
-				if (opcao4 == 2) {
-					int opcao6 = 0;
-					String strOpcao6;
-					System.out.println(
-							"1 - Listagem de pessoas jurídicas.\n 2 - Inserção de pessoas jurídicas. \n 3 - Alteração de pessoas jurídicas.");
-					strOpcao6 = input.nextLine();
-					try {
-						opcao6 = Integer.parseInt(strOpcao6);
-					} catch (Exception e) {
-						System.err.println("Opção inexistente.");
-					}
-					if (opcao6 == 1) {
-						exibirListaPessoaJuridica(ListPessoaJuridica);
-					} else if (opcao6 == 2) {
-						ListPessoaJuridica.add(cadastrarPessoaJuridica(ListPessoaJuridica));
-					} else if (opcao6 == 3) {
-						alterarPessoaJuridica(ListPessoaJuridica);
-					} else {
-						System.err.println("Digite a informação correta.");
-					}
+
 					break;
+
+				case 2:
+					// (listagem, inserção e alteração);
+					int opcao3 = 0;
+					String strOpcao3;
+					System.out.println(
+							"1 - Listagem de categorias.\n 2 - Inserção de categorias. \n 3 - Alteração de categorias.");
+					strOpcao3 = input.nextLine();
+					try {
+						opcao3 = Integer.parseInt(strOpcao3);
+					} catch (Exception e) {
+						System.err.println("Opção inexistente.");
+					}
+					if (opcao3 == 1) {
+						exibirListaCategorias(ListCategorias);
+					} else if (opcao3 == 2) {
+						ListCategorias.add(cadastrarCategoria(ListCategorias));
+					} else if (opcao3 == 3) {
+						alterarCategoria(ListCategorias);
+					} else {
+						System.out.println("Opção inexistente.");
+					}
+
+					break;
+				case 3:
+					// (listagem, inserção e alteração);
+					int opcao4 = 0;
+					String stropcao4;
+					System.out.println("1 - Cadastrar pessoa física.\n" + "2 - Cadastrar pessoa jurídica");
+					stropcao4 = input.nextLine();
+					try {
+						opcao4 = Integer.parseInt(stropcao4);
+					} catch (Exception e) {
+						System.err.println("Opção inválida.");
+					}
+
+					if (opcao4 == 1) {
+						int opcao5 = 0;
+						String strOpcao5;
+						System.out.println(
+								"1 - Listagem de pessoas físicas.\n 2 - Inserção de pessoas físicas. \n 3 - Alteração de pessoas físicas.");
+						strOpcao5 = input.nextLine();
+						try {
+							opcao5 = Integer.parseInt(strOpcao5);
+						} catch (Exception e) {
+							System.err.println("Opção inexistente.");
+						}
+						if (opcao5 == 1) {
+							exibirListaPessoaFisica(ListPessoaFisica);
+						} else if (opcao5 == 2) {
+							ListPessoaFisica.add(cadastrarPessoaFisica(ListPessoaFisica));
+						} else if (opcao5 == 3) {
+							alterarPessoaFisica(ListPessoaFisica);
+						} else {
+							System.err.println("Digite a informação correta.");
+						}
+					}
+					if (opcao4 == 2) {
+						int opcao6 = 0;
+						String strOpcao6;
+						System.out.println(
+								"1 - Listagem de pessoas jurídicas.\n 2 - Inserção de pessoas jurídicas. \n 3 - Alteração de pessoas jurídicas.");
+						strOpcao6 = input.nextLine();
+						try {
+							opcao6 = Integer.parseInt(strOpcao6);
+						} catch (Exception e) {
+							System.err.println("Opção inexistente.");
+						}
+						if (opcao6 == 1) {
+							exibirListaPessoaJuridica(ListPessoaJuridica);
+						} else if (opcao6 == 2) {
+							ListPessoaJuridica.add(cadastrarPessoaJuridica(ListPessoaJuridica));
+						} else if (opcao6 == 3) {
+							alterarPessoaJuridica(ListPessoaJuridica);
+						} else {
+							System.err.println("Digite a informação correta.");
+						}
+						break;
+					}
+				case 4:
+					// (listagem, inserção e alteração);
+					int opcao7 = 0;
+					String strOpcao7;
+					System.out.println(
+							"1 - Listagem de fornecedores.\n 2 - Inserção de fornecedores. \n 3 - Alteração de fornecedores.");
+					strOpcao7 = input.nextLine();
+					try {
+						opcao7 = Integer.parseInt(strOpcao7);
+					} catch (Exception e) {
+						System.err.println("Opção inexistente.");
+					}
+					if (opcao7 == 1) {
+						exibirListaFornecedores(ListFornecedores, 1);
+					} else if (opcao7 == 2) {
+						ListFornecedores.add(cadastrarFornecedores(ListFornecedores));
+					} else if (opcao7 == 3) {
+
+						alterarFornecedores(ListFornecedores);
+					} else {
+						System.out.println("Opção inexistente.");
+					}
+
+					break;
+				case 5:
+
+					efetuarCompras(ListProdutos);
 				}
-			case 4:
-				// (listagem, inserção e alteração);
-				int opcao7 = 0;
-				String strOpcao7;
-				System.out.println(
-						"1 - Listagem de fornecedores.\n 2 - Inserção de fornecedores. \n 3 - Alteração de fornecedores.");
-				strOpcao7 = input.nextLine();
-				try {
-					opcao7 = Integer.parseInt(strOpcao7);
-				} catch (Exception e) {
-					System.err.println("Opção inexistente.");
-				}
-				if (opcao7 == 1) {
-					exibirListaFornecedores(ListFornecedores);
-				} else if (opcao7 == 2) {
-					ListFornecedores.add(cadastrarFornecedores(ListFornecedores));
-				} else if (opcao7 == 3) {
 
-					alterarFornecedores(ListFornecedores);
-				} else {
-					System.out.println("Opção inexistente.");
-				}
-
-				break;
-
-			}
-
-		} while (opcao != 0);
+			} while (opcao != 0);
+		} catch (Exception e) {
+			System.out.println("Algo de errado não está certo");
+		}
 	}
 
-	static public Produto cadastrarProduto(ArrayList<Categoria> ListCategorias, ArrayList<Fornecedores> ListFornecedores,ArrayList<Produto> ListProdutos) {
+	static public void efetuarCompras(ArrayList<Produto> ListProdutos) {
+		/*
+		 * private Calendario calendario; private Produto produto; private Fornecedores
+		 * fornecedores; private int id; private double preco;
+		 */
+
+		Produto produtoSelect;
+
+		int quantidadeEstoque;
+		int codigoProduto = 0;
+
+		do {
+			if (!exibirListaProdutos(ListProdutos))
+				return;
+			codigoProduto = digitarNumero("Digite o código do produto que deseja abastecer: ", "Código incorreto.");
+		} while (!confirmarProduto(ListProdutos, codigoProduto));
+		produtoSelect = retornarProduto(ListProdutos, codigoProduto);
+		System.out.println("Você selecionou o produto:");
+		System.out.println(produtoSelect.dadosProdutos());
+		quantidadeEstoque = digitarNumero("Quantidade de produtos comprados: ", "Informação incorreta.");
+		produtoSelect.setQtde_estoque(quantidadeEstoque + produtoSelect.getQtde_estoque());
+
+	}
+
+	static public Produto cadastrarProduto(ArrayList<Categoria> ListCategorias,
+			ArrayList<Fornecedores> ListFornecedores, ArrayList<Produto> ListProdutos, ArrayList<Unidade> ListUnidade) {
 		int id;
 		int codFornecedor;
+		int idUnidade = 0;
+		int numUnidade;
+
 		Categoria categoriaSelecionada;
 		Fornecedores fornecedorSelec;
+		Unidade unidadeSelecionada;
+
+		if (ListCategorias.size() == 0 && ListFornecedores.size() == 0) {
+			System.out.println("Listas de categoria e fornecedores vazias");
+			return null;
+		} else {
+			if (ListCategorias.size() == 0) {
+				System.out.println("Lista de categoria vazia");
+				return null;
+			} else if (ListFornecedores.size() == 0) {
+				System.out.println("Lista de fornecedores vazia");
+				return null;
+			}
+		}
 
 		do {
 			if (!exibirListaCategorias(ListCategorias))
@@ -181,15 +241,22 @@ public class Main {
 		System.out.println("Informe o nome do produto: ");
 		String nome = input.nextLine();
 		do {
-			if(!exibirListaFornecedores(ListFornecedores))
+			if (!exibirListaFornecedores(ListFornecedores, 2))
 				return null;
 			codFornecedor = digitarNumero("Informe o código do fornecedor: ", "Informe o código correto");
-		}while(!confirmarFornecedores(ListFornecedores, codFornecedor));
+		} while (!confirmarFornecedores(ListFornecedores, codFornecedor));
 		fornecedorSelec = retornarFornecedores(ListFornecedores, codFornecedor);
 		double preco = numeroDouble("Informe o preço do produto: ", "Preço do produto inválido.");
-		double qtde_estoque = numeroDouble("Informe a quantidade de estoque do produto: ",
-				"Quantidade de estoque inválida.");
-		Produto produto = new Produto(categoriaSelecionada,  ListProdutos.size() + 1, fornecedorSelec,nome, preco, qtde_estoque);
+		int qtd_estoque = digitarNumero("Informe a quantidade de produtos: ", "Informação inválida");
+		exibirListaUnidade(ListUnidade);
+		do {
+			numUnidade = digitarNumero("Informe o tipo de unidade:   ", "Inormação inválida.");
+
+		} while (numUnidade < 1 || numUnidade > 4);
+		unidadeSelecionada = retornarUnidades(ListUnidade, numUnidade);
+		Produto produto = new Produto(categoriaSelecionada, ListProdutos.size() + 1, fornecedorSelec, nome, preco,
+				qtd_estoque, unidadeSelecionada);
+
 		return produto;
 	}
 
@@ -235,7 +302,7 @@ public class Main {
 	static private boolean ehApenasNumero(String digitado, String fraseErro) {
 
 		try {
-			int n = Integer.parseInt(digitado);
+			long n = Long.parseLong(digitado);
 		} catch (Exception e) {
 			System.out.println(fraseErro);
 			return false;
@@ -334,7 +401,7 @@ public class Main {
 	}
 
 	static public Fornecedores cadastrarFornecedores(ArrayList<Fornecedores> ListFornecedores) {
-	
+
 		String nomeFornecedor, ruaFornecedor, cepFornecedor, bairroFornecedor, complementoFornecedor, cidadeFornecedor,
 				estadoFornecedor, emailFornecedor, telefoneFornecedor, celularFornecedor, cpfCnpjFornecedor;
 
@@ -356,8 +423,8 @@ public class Main {
 		emailFornecedor = input.nextLine();
 		telefoneFornecedor = digitarStrApenasNumero("Informe o número do telefone fixo: ",
 				"Número do telefone inválido");
-		celularFornecedor = digitarStrApenasNumero("Informe o número do seu celular: ", "Número inválido");
-		cpfCnpjFornecedor = digitarStrApenasNumero("Informe o seu CPF: ", "Número inválido");
+		celularFornecedor = digitarStrApenasNumero("Informe o número do celular: ", "Número inválido");
+		cpfCnpjFornecedor = digitarStrApenasNumero("Informe o CPF ou CNPJ: ", "Número inválido");
 
 		Endereco endereco = new Endereco(ruaFornecedor, cepFornecedor, bairroFornecedor, intnumFornecedor,
 				complementoFornecedor, cidadeFornecedor, estadoFornecedor);
@@ -425,7 +492,7 @@ public class Main {
 		return true;
 	}
 
-	static private boolean exibirListaFornecedores(ArrayList<Fornecedores> ListFornecedores) {
+	static private boolean exibirListaFornecedores(ArrayList<Fornecedores> ListFornecedores, int opcao) {
 
 		// se o tamanho da lista for 0, retorna falso.
 		if (ListFornecedores.size() == 0) {
@@ -434,7 +501,12 @@ public class Main {
 		}
 		for (Fornecedores fo : ListFornecedores) {
 			System.out.println("Fornecedor: ");
-			System.out.println(fo.dadosFornecedores());
+			if (opcao == 1) {
+				System.out.println(fo.dadosFornecedores());
+			} else if (opcao == 2) {
+				System.out.println(fo.dadosFornecedores2());
+			}
+
 		}
 		return true;
 	}
@@ -499,6 +571,29 @@ public class Main {
 
 	}
 
+	static private boolean exibirListaUnidade(ArrayList<Unidade> ListUnidade) {
+
+		// se o tamanho da lista for 0, retorna falso.
+		if (ListUnidade.size() == 0) {
+			System.err.println("Lista unidades vazia.");
+			return false;
+		}
+		for (Unidade u : ListUnidade) {
+			System.out.println("Unidade: ");
+			// o c vai referenciar cada elemento na lista, um de cada vez.
+			System.out.println(u.dadosUnidade());
+		}
+		return true;
+	}
+
+	static private Unidade retornarUnidades(ArrayList<Unidade> ListUnidade, int idUnidade) {
+		for (Unidade u : ListUnidade) {
+			if (u.getId() == idUnidade)
+				return u;
+		}
+		return null;
+	}
+
 	static private Fornecedores retornarFornecedores(ArrayList<Fornecedores> ListFornecedores, int idFornecedores) {
 		for (Fornecedores fo : ListFornecedores) {
 			if (fo.getId() == idFornecedores)
@@ -540,15 +635,18 @@ public class Main {
 		return null;
 	}
 
-	static private void alterarProduto(ArrayList<Produto> ListProdutos, ArrayList<Categoria> ListCategorias,ArrayList<Fornecedores> ListFornecedores) {
+	static private void alterarProduto(ArrayList<Produto> ListProdutos, ArrayList<Categoria> ListCategorias,
+			ArrayList<Fornecedores> ListFornecedores) {
 		int cod;
 		Produto produtoSelecionado;
 		Categoria categoriaSelecionada;
 		Fornecedores fornecedorSelecionado;
 		exibirListaProdutos(ListProdutos);
-		exibirListaFornecedores(ListFornecedores);
+		exibirListaFornecedores(ListFornecedores, 1);
 
 		do {
+			if (!exibirListaProdutos(ListProdutos))
+				return;
 			cod = digitarNumero("Informe o código do produto que vc deseja alterar: ", "Informe o código correto.");
 		} while (!confirmarProduto(ListProdutos, cod));
 		produtoSelecionado = retornarProduto(ListProdutos, cod);
@@ -556,7 +654,8 @@ public class Main {
 		System.out.println(produtoSelecionado.dadosProdutos());
 		System.out.println("O que deseja alterar nesse produto?");
 		do {
-			int info = digitarNumero("Digite:\n 1 - Categoria.\n 2 - Fornecedor \n 3 - nome\n 4 - precoVenda\n 5 - qtde_estoque",
+			int info = digitarNumero(
+					"Digite:\n 1 - Categoria.\n 2 - Fornecedor \n 3 - nome\n 4 - precoVenda\n 5 - qtde_estoque",
 					"Informação incorreta.");
 			if (info == 1) {
 				int novoCod;
@@ -570,10 +669,10 @@ public class Main {
 				System.out.println(categoriaSelecionada.dadosCategoria());
 				produtoSelecionado.setCategoria(categoriaSelecionada);
 
-			}else if(info == 2) {
+			} else if (info == 2) {
 				int novoFornecedor;
 				do {
-					if (!exibirListaFornecedores(ListFornecedores))
+					if (!exibirListaFornecedores(ListFornecedores, 2))
 						return;
 					novoFornecedor = digitarNumero("Informe o novo código do Fornecedor", "Informe o código correto.");
 				} while (!confirmarFornecedores(ListFornecedores, novoFornecedor));
@@ -581,8 +680,7 @@ public class Main {
 				System.out.println("Você selecionou o fornecedor: ");
 				System.out.println(fornecedorSelecionado.dadosFornecedores());
 				produtoSelecionado.setFornecedores(fornecedorSelecionado);
-			}
-			else if (info == 3) {
+			} else if (info == 3) {
 				String novoNome;
 				System.out.println("Informe o novo nome para o produto: ");
 				novoNome = input.nextLine();
@@ -824,7 +922,7 @@ public class Main {
 		Fornecedores fornecedorSelecionado;
 		Endereco enderecoAuxrFornecedor;
 		do {
-			if (!exibirListaFornecedores(ListFornecedores))
+			if (!exibirListaFornecedores(ListFornecedores, 1))
 				return;
 
 			idFornecedores = digitarNumero("Informe o código do fornecedor que você deseja alterar: ",
@@ -909,5 +1007,5 @@ public class Main {
 			}
 		} while (perguntaSimNao("Deseja alterar mais coisas? \n1 - sim. \n2 - não.", "Informação inválida"));
 	}
-	
+
 }

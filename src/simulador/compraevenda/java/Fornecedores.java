@@ -23,6 +23,10 @@ public class Fornecedores {
 			String retorno = "Código: " + id + " Nome: " + nome + "CPF ou CNPJ: " + cpfCnpj + endereco.dadosEndereco() + " Email: " +  email +" Celular: " + celular +" Telefone: " + telefone;
 			return retorno;
 		}
+		public String dadosFornecedores2() {
+			String retorno = "Código: " + id + "\nNome: " + nome;
+			return retorno;
+		}
 
 		public String getCpfCnpj() {
 		return cpfCnpj;

@@ -17,11 +17,7 @@ public class PessoaFisica extends Pessoa{
 		this.cpf = cpf;
 		
 	}
-	/*this.endereco = endereco;
-	this.telefone = telefone;
-	this.celular = celular;this.
-	this.nome = nome;
-	this.email = email;*/
+
 	public String dadosPessoaFisica() {
 		String retorno = super.dadosPessoa() + " CPF: " + this.cpf;
 		return retorno;
