@@ -6,7 +6,7 @@ public class Produto {
 	private int id;
 	private String nome;
 	private double precoVenda;
-	private double qtde_estoque;
+	private int qtde_estoque;
 	private int qtd_produtos;
 	private Unidade unidade;
 	
@@ -34,10 +34,10 @@ public class Produto {
 	public void setPrecoVenda(double precoVenda) {
 		this.precoVenda = precoVenda;
 	}
-	public double getQtde_estoque() {
+	public int getQtde_estoque() {
 		return qtde_estoque;
 	}
-	public void setQtde_estoque(double qtde_estoque) {
+	public void setQtde_estoque(int qtde_estoque) {
 		this.qtde_estoque = qtde_estoque;
 	}
 	//construtor
