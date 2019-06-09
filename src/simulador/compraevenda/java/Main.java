@@ -42,10 +42,7 @@ public class Main {
 				do {
 					System.out.println("\nDigite: \n 1 - Cadastrar produtos.\n " + "2 - Cadastrar categorias.\n "
 							+ "3 - Cadastrar clientes.\n " + "4 - Cadastrar fornecedores.\n "
-							+ "5 - Efetuar compras(abastecimento de estoque).\n " + "6 - Efetuar venda.\n "
-							+ "7 - Gerar relatórios de vendas por intervalos de datas.\n "
-							+ "8 - Visualizar compras anteriores de um dado cliente.\n "
-							+ "9 - Calcular o consumo médio mensal de cada produto.\n 10 - ");
+							+ "5 - Efetuar compras(abastecimento de estoque).\n " + "6 - Efetuar venda.\n ");
 
 					stropcao = input.nextLine();
 					try {
