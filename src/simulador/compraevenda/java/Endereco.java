@@ -19,7 +19,7 @@ public class Endereco {
 		this.estado = estado;
 	}
 	public String dadosEndereco() {
-		String retorno = "Rua: " + this.rua + " CEP: " + this.cep + " Bairro: " + this.bairro + " Número: " + this.num + " Complemento: " + this.complemento + " Cidade: " + this.cidade + " Estado" + this.estado;
+		String retorno = "\nRua: " + this.rua + "\nCEP: " + this.cep + "\nBairro: " + this.bairro + "\nNúmero: " + this.num + "\nComplemento: " + this.complemento + "\nCidade: " + this.cidade + "\nEstado: " + this.estado;
 		return retorno;
 	}
 	

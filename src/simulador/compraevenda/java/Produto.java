@@ -40,7 +40,7 @@ public class Produto {
 	public void setQtde_estoque(int qtde_estoque) {
 		this.qtde_estoque = qtde_estoque;
 	}
-	//construtor
+
 	public Produto( Categoria categoria, int id, Fornecedores fornecedores, String nome, double precoVenda,  int qtde_estoque, Unidade unidade){
 		this.categoria = categoria;
 		this.id = id;
@@ -70,11 +70,11 @@ public class Produto {
 		this.unidade = unidade;
 	}
 	public String dadosProdutos(){
-		String retorno = "Código do produto: " + this.id + " Fornecedor: " +fornecedores.getNome() + " Categoria: " + this.categoria.getDescricao() + " Nome: " + this.nome + " Preco Venda: " + this.precoVenda + " Quantidade de produtos: " + this.qtde_estoque + " Unidade: " + this.unidade.getNome();
+		String retorno = "\nCódigo do produto: " + this.id + "\nFornecedor: " + this.fornecedores.getNome() + "\nCategoria: " + this.categoria.getDescricao() + "\nNome: " + this.nome + "\nPreco Venda: " + this.precoVenda + "\nQuantidade de produtos: " + this.qtde_estoque + "\nUnidade: " + this.unidade.getNome();
 		return retorno;
 	}
 	public String dadosProdutos2() {
-		String retorno = "Código do produto: " + this.id + "\nNome: " + this.nome + "\nPreco Venda: " + this.precoVenda + "\nQuantidade de produtos: " + this.qtde_estoque;
+		String retorno = "\nCódigo do produto: " + this.id + "\nNome: " + this.nome +"\nCategoria: " + this.categoria.getDescricao() + "\nPreco Venda: " + this.precoVenda + "\nQuantidade de produtos: " + this.qtde_estoque;
 		return retorno;
 	}
 

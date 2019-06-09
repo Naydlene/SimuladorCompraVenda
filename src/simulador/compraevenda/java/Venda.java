@@ -3,21 +3,29 @@ package simulador.compraevenda.java;
 import java.util.ArrayList;
 
 public class Venda{
-	
+
+	private double precototal;
 	private double desconto;
 	private int tipoComprador;
 	private int idVenda;
 	private String momentoCompra;
 	ArrayList<ProdutoVendido> ListProdutosVendidos;
 	
-	public Venda(double desconto, int tipoComprador, int idVenda, String momentoCompra,ArrayList<ProdutoVendido>  ListProdutosVendidos) {
+	public Venda(double precototal, double desconto, int tipoComprador, int idVenda, String momentoCompra,ArrayList<ProdutoVendido>  ListProdutosVendidos) {
+		this.precototal = precototal;
 		this.desconto = desconto;
 		this.tipoComprador = tipoComprador;
 		this.idVenda = idVenda;
 		this.momentoCompra = momentoCompra;
 		this.ListProdutosVendidos = ListProdutosVendidos;
 	}
-	
+	public double getPrecototal() {
+		return precototal;
+	}
+
+	public void setPrecototal(double precototal) {
+		this.precototal = precototal;
+	}
 	public int getIdVenda() {
 		return idVenda;
 	}

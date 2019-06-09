@@ -19,7 +19,11 @@ public class PessoaFisica extends Pessoa{
 	}
 
 	public String dadosPessoaFisica() {
-		String retorno = super.dadosPessoa() + " CPF: " + this.cpf;
+		String retorno = super.dadosPessoa() + "\nCPF: " + this.cpf;
+		return retorno;
+	}
+	public String dadosPessoaFisica2() {
+		String retorno = "\nCódigo: " + super.getId() + "\nNome: " + super.getNome() + "\nCPF: " + this.cpf;
 		return retorno;
 	}
 	

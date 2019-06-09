@@ -35,7 +35,7 @@ public class Categoria {
 	}
 
 	public String dadosCategoria() {
-		String retorno = "\n ID: " + this.id + "\nDesc: " + this.descricao;
+		String retorno = "\nCódigo: " + this.id + "\nDesc: " + this.descricao;
 		return retorno;
 	}
 }

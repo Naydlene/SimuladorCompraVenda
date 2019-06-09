@@ -18,7 +18,11 @@ public class PessoaJuridica extends Pessoa{
 		
 	}
 	public String dadosPessoaJuridica() {
-		String retorno = super.dadosPessoa() + " CNPJ: " + this.cnpj;
+		String retorno = super.dadosPessoa() + "\nCNPJ: " + this.cnpj;
+		return retorno;
+	}
+	public String dadosPessoaJuridica2() {
+		String retorno = "\nCódigo: "  + super.getId() + "\nNome: " + super.getNome() + "\nCPF: " + this.cnpj;
 		return retorno;
 	}
 	

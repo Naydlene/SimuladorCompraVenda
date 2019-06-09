@@ -20,7 +20,7 @@ public class Fornecedores {
 		this.cpfCnpj = cpfCnpj;
 		}
 		public String dadosFornecedores(){
-			String retorno = "Código: " + id + " Nome: " + nome + "CPF ou CNPJ: " + cpfCnpj + endereco.dadosEndereco() + " Email: " +  email +" Celular: " + celular +" Telefone: " + telefone;
+			String retorno = "Código: " + id + "\nNome: " + nome + "\nCPF ou CNPJ: " + cpfCnpj + endereco.dadosEndereco() + "\nEmail: " +  email +"\nCelular: " + celular + "\nTelefone: " + telefone;
 			return retorno;
 		}
 		public String dadosFornecedores2() {

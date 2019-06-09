@@ -20,7 +20,7 @@ public class Pessoa {
 		
 	}
 	public String dadosPessoa(){
-		String retorno = "Código: " + id + " Nome: " + this.nome + endereco.dadosEndereco() + " Email: " + this.email + " Telefone: " + this.telefone + " Celular: " + this.celular; 
+		String retorno = "\nCódigo: " + this.id + "\nNome: " + this.nome + endereco.dadosEndereco() + "\nEmail: " + this.email + "\nTelefone: " + this.telefone + "\nCelular: " + this.celular; 
 		return retorno;
 	}
 	
