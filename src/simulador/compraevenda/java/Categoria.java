@@ -8,10 +8,12 @@ public class Categoria {
 	private int id;
 	private String descricao;
 	
+	public Categoria() {
+	}
+	
 	public Categoria(int id, String descricao) {
-		this.id = id;
-		this.descricao = descricao;
 		boolean conectou = false;
+		boolean tudoOk = true;
 		Connection con = null;
 		Statement stm;
 		do {
@@ -29,19 +31,21 @@ public class Categoria {
 		try {
 			stm = con.createStatement();
 			String StringQuery = "insert into categoria values("+id+",'"+descricao+"')";
-			stm.execute(StringQuery);
-			
-			
-			System.out.println(stm.executeQuery("select * from categoria"));
-			
-			
+			stm.execute(StringQuery);	
 			con.close();
 		} catch (Exception e) {
+			tudoOk = false;
 			e.printStackTrace();
+		}
+		
+		if(tudoOk) {
+			this.id = id;
+			this.descricao = descricao;
 		}
 		
 		
 	}
+	
 	public int getId() {
 		return id;
 	}

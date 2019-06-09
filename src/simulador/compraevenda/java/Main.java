@@ -2,32 +2,46 @@ package simulador.compraevenda.java;
 
 import java.util.Scanner;
 import java.sql.Connection;
+import java.sql.PreparedStatement;
+import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.text.DecimalFormat;
 import java.util.ArrayList;
 
+
+
+
 public class Main {
 
-	private static final ArrayList<Categoria> ListCategorias = null;
 	static Scanner input = new Scanner(System.in);
 
 	public static void main(String[] args) {
 		ArrayList<Produto> ListProdutos = new ArrayList<>();
-		ArrayList<Categoria> ListCategorias = new ArrayList<>();
+		ArrayList<Categoria> ListCategorias; //ok
 		ArrayList<PessoaFisica> ListPessoaFisica = new ArrayList<>();
 		ArrayList<PessoaJuridica> ListPessoaJuridica = new ArrayList<>();
 		ArrayList<Fornecedores> ListFornecedores = new ArrayList<>();
-		ArrayList<Unidade> ListUnidade = new ArrayList<>();
+		ArrayList<Unidade> ListUnidade; //ok
 		ArrayList<Venda> ListVendas = new ArrayList<>();
-		ListUnidade.add(new Unidade(1, "UND (unidade)"));
-		ListUnidade.add(new Unidade(2, "M (metro)"));
-		ListUnidade.add(new Unidade(3, "KG (quilo)"));
-		ListUnidade.add(new Unidade(4, "L (litro)"));
+		
+		try {
+			ListUnidade = InicializaUnidades();
+		}catch(Exception e) {
+			ListUnidade = new ArrayList<>();
+		}
+		try {
+			ListCategorias = InicializaListCategorias();
+		}catch(Exception e) {
+			ListCategorias = new ArrayList<>();
+		}
+			
+		
 		Usuario usuario = new Usuario();
 		String novoUsuario = "a";
 		usuario.setLogin(novoUsuario);
 		String senha = "a";
 		usuario.setSenha(senha);
+		
 
 		String stropcao;
 		int opcao = 999;
@@ -204,6 +218,81 @@ public class Main {
 				System.out.println("Algo de errado não está certo\n" + e);
 			}
 		} while (opcao != 0);
+	}
+	/*
+	static public ArrayList<Produto> InicializaProtudo() throws SQLException {
+		ArrayList<Produto> ListProdutos = new ArrayList<Produto>();
+
+	    try {
+	        Connection connection = ConectaBanco.criarConexao();
+	        PreparedStatement statement = connection.prepareStatement
+	        ("SELECT id_produto, descricao FROM categoria");
+	        ResultSet resultSet = statement.executeQuery();
+	        while (resultSet.next()) {
+	        	Produto produto = new Produto();
+	        	produto.setId (resultSet.getInt("id_produto"));
+	        	produto.setId_forn (resultSet.getInt("id_produto"));
+	        	produto.setId (resultSet.getInt("id_produto"));
+	        	produto.setId (resultSet.getInt("id_produto"));
+	        	produto.setId (resultSet.getInt("id_produto"));
+	        	produto.setId (resultSet.getInt("id_produto"));
+	        	produto.setId (resultSet.getInt("id_produto"));
+	        	produto.setId (resultSet.getInt("id_produto"));
+	        	produto.setDescricao(resultSet.getString("descricao"));
+	        	ListProdutos.add(produto);
+	        }
+	        connection.close();
+	    }catch(Exception e) {
+	    	System.out.println("Não há produtos salvas.");
+	    }
+	
+
+	    return ListProdutos;
+	}
+	*/
+	
+	static public ArrayList<Categoria> InicializaListCategorias() throws SQLException {
+		ArrayList<Categoria> listaCategoria = new ArrayList<Categoria>();
+
+	    try {
+	        Connection connection = ConectaBanco.criarConexao();
+	        PreparedStatement statement = connection.prepareStatement("SELECT id_categoria, descricao FROM categoria");
+	        ResultSet resultSet = statement.executeQuery();
+	        while (resultSet.next()) {
+	        	Categoria categoria = new Categoria();
+	        	categoria.setId(resultSet.getInt("id_categoria"));
+	        	categoria.setDescricao(resultSet.getString("descricao"));
+	        	listaCategoria.add(categoria);
+	        }
+	        connection.close();
+	    }catch(Exception e) {
+	    	System.out.println("Não há categorias salvas.");
+	    }
+	
+
+	    return listaCategoria;
+	}
+	
+	static public ArrayList<Unidade> InicializaUnidades() throws SQLException {
+		ArrayList<Unidade> listaUnidade = new ArrayList<Unidade>();
+
+	    try {
+	        Connection connection = ConectaBanco.criarConexao();
+	        PreparedStatement statement = connection.prepareStatement("SELECT id_unidade, nome FROM unidade");
+	        ResultSet resultSet = statement.executeQuery();
+	        while (resultSet.next()) {
+	        	Unidade unidade = new Unidade();
+	        	unidade.setId(resultSet.getInt("id_unidade"));
+	        	unidade.setNome(resultSet.getString("nome"));
+	        	listaUnidade.add(unidade);
+	        }
+	        connection.close();
+	    }catch(Exception e) {
+	    	System.out.println("Não há Unidades salvas.");
+	    }
+	
+
+	    return listaUnidade;
 	}
 
 	static private Venda efetuarVendas(ArrayList<Produto> ListProdutos, ArrayList<Categoria> ListCategorias,
