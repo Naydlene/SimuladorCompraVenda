@@ -1,6 +1,8 @@
 package simulador.compraevenda.java;
 
 import java.util.Scanner;
+import java.sql.Connection;
+import java.sql.SQLException;
 import java.text.DecimalFormat;
 import java.util.ArrayList;
 
@@ -22,9 +24,9 @@ public class Main {
 		ListUnidade.add(new Unidade(3, "KG (quilo)"));
 		ListUnidade.add(new Unidade(4, "L (litro)"));
 		Usuario usuario = new Usuario();
-		String novoUsuario = "Naydlene";
+		String novoUsuario = "a";
 		usuario.setLogin(novoUsuario);
-		String senha = "javaminion";
+		String senha = "a";
 		usuario.setSenha(senha);
 
 		String stropcao;
@@ -271,7 +273,6 @@ public class Main {
 			}while(qtdItens <= 0);
 			preco = qtdItens * produto.getPrecoVenda();
 			total = total + preco;
-			System.out.println(total);
 			
 			quantidade = produto.getQtde_estoque() - qtdItens;
 			if (quantidade >= 0) {

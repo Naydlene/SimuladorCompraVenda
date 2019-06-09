@@ -6,4 +6,5 @@
  *
  */
 module simulador {
+	requires java.sql;
 }
