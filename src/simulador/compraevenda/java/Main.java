@@ -16,23 +16,46 @@ public class Main {
 	static Scanner input = new Scanner(System.in);
 
 	public static void main(String[] args) {
-		ArrayList<Produto> ListProdutos = new ArrayList<>();
 		ArrayList<Categoria> ListCategorias; //ok
-		ArrayList<PessoaFisica> ListPessoaFisica = new ArrayList<>();
-		ArrayList<PessoaJuridica> ListPessoaJuridica = new ArrayList<>();
-		ArrayList<Fornecedores> ListFornecedores = new ArrayList<>();
 		ArrayList<Unidade> ListUnidade; //ok
+		ArrayList<Fornecedores> ListFornecedores; //ok
+		ArrayList<Produto> ListProdutos; //ok
+		ArrayList<PessoaFisica> ListPessoaFisica;
+		ArrayList<PessoaJuridica> ListPessoaJuridica;
+		
+		
 		ArrayList<Venda> ListVendas = new ArrayList<>();
 		
+		
+		try {
+			ListCategorias = InicializaListCategorias();
+		}catch(Exception e) {
+			ListCategorias = new ArrayList<>();
+		}
 		try {
 			ListUnidade = InicializaUnidades();
 		}catch(Exception e) {
 			ListUnidade = new ArrayList<>();
 		}
 		try {
-			ListCategorias = InicializaListCategorias();
+			ListFornecedores = InicializaFornecedores();
 		}catch(Exception e) {
-			ListCategorias = new ArrayList<>();
+			ListFornecedores = new ArrayList<>();
+		}
+		try {
+			ListProdutos = InicializaProdutos(ListCategorias, ListUnidade, ListFornecedores);
+		}catch(Exception e) {
+			ListProdutos = new ArrayList<>();
+		}
+		try {
+			ListPessoaFisica = InicializaPessoaFisica();
+		}catch(Exception e) {
+			ListPessoaFisica = new ArrayList<>();
+		}
+		try {
+			ListPessoaJuridica = InicializaPessoaJuridica();
+		}catch(Exception e) {
+			ListPessoaJuridica = new ArrayList<>();
 		}
 			
 		
@@ -147,7 +170,7 @@ public class Main {
 							if (opcao5 == 1) {
 								exibirListaPessoaFisica(ListPessoaFisica, 1);
 							} else if (opcao5 == 2) {
-								ListPessoaFisica.add(cadastrarPessoaFisica(ListPessoaFisica));
+								ListPessoaFisica.add(cadastrarPessoaFisica(ListPessoaFisica, ListPessoaJuridica));
 							} else if (opcao5 == 3) {
 								alterarPessoaFisica(ListPessoaFisica);
 							} else {
@@ -168,7 +191,7 @@ public class Main {
 							if (opcao6 == 1) {
 								exibirListaPessoaJuridica(ListPessoaJuridica, 1);
 							} else if (opcao6 == 2) {
-								ListPessoaJuridica.add(cadastrarPessoaJuridica(ListPessoaJuridica));
+								ListPessoaJuridica.add(cadastrarPessoaJuridica(ListPessoaJuridica, ListPessoaFisica));
 							} else if (opcao6 == 3) {
 								alterarPessoaJuridica(ListPessoaJuridica);
 							} else {
@@ -216,26 +239,94 @@ public class Main {
 			}
 		} while (opcao != 0);
 	}
-	/*
-	static public ArrayList<Produto> InicializaProtudo() throws SQLException {
+
+	static public ArrayList<PessoaJuridica> InicializaPessoaJuridica() throws SQLException {
+		ArrayList<PessoaJuridica> ListPessoaJuridica = new ArrayList<>();
+	    try {
+	        Connection connection = ConectaBanco.criarConexao();
+	        PreparedStatement statement = connection.prepareStatement
+	        ("select p.*, pj.cnpj from pessoa p join pessoajuridica pj ON (p.id_pessoa = pj.id_pessoa)");
+	        ResultSet resultSet = statement.executeQuery();
+	        while (resultSet.next()) {
+	        	PessoaJuridica pessoajuridica = new PessoaJuridica();
+	        	pessoajuridica.setId(resultSet.getInt("id_pessoa"));
+	        	pessoajuridica.setNome(resultSet.getString("nome"));
+	        	pessoajuridica.setEmail(resultSet.getString("email"));
+	        	pessoajuridica.setTelefone(resultSet.getString("telefone"));
+	        	pessoajuridica.setCelular(resultSet.getString("celular"));
+	        	pessoajuridica.setCnpj(resultSet.getString("cnpj"));
+	        	pessoajuridica.setEndereco(new Endereco(resultSet.getString("rua"), 
+	        			resultSet.getString("cep"), 
+	        			resultSet.getString("bairro"),
+	        			resultSet.getInt("num"),
+	        			resultSet.getString("complemento"),
+	        			resultSet.getString("cidade"),
+	        			resultSet.getString("estado")
+	        			));
+	        	ListPessoaJuridica.add(pessoajuridica);
+	        }
+	        connection.close();
+	    }catch(Exception e) {
+	    	System.out.println("Não há Fornecedores salvas.");
+	    }
+	
+
+	    return ListPessoaJuridica;
+	}
+
+	static public ArrayList<PessoaFisica> InicializaPessoaFisica() throws SQLException {
+		ArrayList<PessoaFisica> ListPessoaFisica = new ArrayList<>();
+	    try {
+	        Connection connection = ConectaBanco.criarConexao();
+	        PreparedStatement statement = connection.prepareStatement
+	        ("select p.*, pf.cpf from pessoa p join pessoafisica pf ON (p.id_pessoa = pf.id_pessoa)");
+	        ResultSet resultSet = statement.executeQuery();
+	        while (resultSet.next()) {
+	        	PessoaFisica pessoafisica = new PessoaFisica();
+	        	pessoafisica.setId(resultSet.getInt("id_pessoa"));
+	        	pessoafisica.setNome(resultSet.getString("nome"));
+	        	pessoafisica.setEmail(resultSet.getString("email"));
+	        	pessoafisica.setTelefone(resultSet.getString("telefone"));
+	        	pessoafisica.setCelular(resultSet.getString("celular"));
+	        	pessoafisica.setCpf(resultSet.getString("cpf"));
+	        	pessoafisica.setEndereco(new Endereco(resultSet.getString("rua"), 
+	        			resultSet.getString("cep"), 
+	        			resultSet.getString("bairro"),
+	        			resultSet.getInt("num"),
+	        			resultSet.getString("complemento"),
+	        			resultSet.getString("cidade"),
+	        			resultSet.getString("estado")
+	        			));
+	        	ListPessoaFisica.add(pessoafisica);
+	        }
+	        connection.close();
+	    }catch(Exception e) {
+	    	System.out.println("Não há PessoasFisicas salvas.");
+	    }
+	
+
+	    return ListPessoaFisica;
+	}
+
+	
+	static public ArrayList<Produto> InicializaProdutos(ArrayList<Categoria> ListCategorias, ArrayList<Unidade> ListUnidade, ArrayList<Fornecedores> ListFornecedores) throws SQLException {
 		ArrayList<Produto> ListProdutos = new ArrayList<Produto>();
 
 	    try {
 	        Connection connection = ConectaBanco.criarConexao();
 	        PreparedStatement statement = connection.prepareStatement
-	        ("SELECT id_produto, descricao FROM categoria");
+	        ("SELECT * FROM produto");
 	        ResultSet resultSet = statement.executeQuery();
 	        while (resultSet.next()) {
 	        	Produto produto = new Produto();
 	        	produto.setId (resultSet.getInt("id_produto"));
-	        	produto.setId_forn (resultSet.getInt("id_produto"));
-	        	produto.setId (resultSet.getInt("id_produto"));
-	        	produto.setId (resultSet.getInt("id_produto"));
-	        	produto.setId (resultSet.getInt("id_produto"));
-	        	produto.setId (resultSet.getInt("id_produto"));
-	        	produto.setId (resultSet.getInt("id_produto"));
-	        	produto.setId (resultSet.getInt("id_produto"));
-	        	produto.setDescricao(resultSet.getString("descricao"));
+	        	produto.setNome (resultSet.getString("nome"));
+	        	produto.setPrecoVenda(resultSet.getDouble("precovenda"));
+	        	produto.setQtde_estoque(resultSet.getInt("qtd_estoque"));
+	        	produto.setQtd_produtos(resultSet.getInt("qtd_produtos"));
+	        	produto.setCategoria(retornarCategoria(ListCategorias, resultSet.getInt("id_categoria")));
+	        	produto.setFornecedores(retornarFornecedores(ListFornecedores, resultSet.getInt("id_fornecedores")));
+	        	produto.setUnidade(retornarUnidades(ListUnidade, resultSet.getInt("id_unidade")));
 	        	ListProdutos.add(produto);
 	        }
 	        connection.close();
@@ -246,7 +337,29 @@ public class Main {
 
 	    return ListProdutos;
 	}
-	*/
+	
+	
+	static public ArrayList<Unidade> InicializaUnidades() throws SQLException {
+		ArrayList<Unidade> listaUnidade = new ArrayList<Unidade>();
+
+	    try {
+	        Connection connection = ConectaBanco.criarConexao();
+	        PreparedStatement statement = connection.prepareStatement("SELECT id_unidade, nome FROM unidade");
+	        ResultSet resultSet = statement.executeQuery();
+	        while (resultSet.next()) {
+	        	Unidade unidade = new Unidade();
+	        	unidade.setId(resultSet.getInt("id_unidade"));
+	        	unidade.setNome(resultSet.getString("nome"));
+	        	listaUnidade.add(unidade);
+	        }
+	        connection.close();
+	    }catch(Exception e) {
+	    	System.out.println("Não há Unidades salvas.");
+	    }
+	
+
+	    return listaUnidade;
+	}
 	
 	static public ArrayList<Categoria> InicializaListCategorias() throws SQLException {
 		ArrayList<Categoria> listaCategoria = new ArrayList<Categoria>();
@@ -269,27 +382,40 @@ public class Main {
 
 	    return listaCategoria;
 	}
-	
-	static public ArrayList<Unidade> InicializaUnidades() throws SQLException {
-		ArrayList<Unidade> listaUnidade = new ArrayList<Unidade>();
 
+	static public ArrayList<Fornecedores> InicializaFornecedores() throws SQLException {
+		ArrayList<Fornecedores> ListFornecedores = new ArrayList<>();
 	    try {
 	        Connection connection = ConectaBanco.criarConexao();
-	        PreparedStatement statement = connection.prepareStatement("SELECT id_unidade, nome FROM unidade");
+	        PreparedStatement statement = connection.prepareStatement
+	        ("SELECT id_fornecedores, nome, email, telefone, celular, cpfcnpj,"
+	        + "rua, cep, bairro, num, complemento, cidade, estado FROM fornecedores");
 	        ResultSet resultSet = statement.executeQuery();
 	        while (resultSet.next()) {
-	        	Unidade unidade = new Unidade();
-	        	unidade.setId(resultSet.getInt("id_unidade"));
-	        	unidade.setNome(resultSet.getString("nome"));
-	        	listaUnidade.add(unidade);
+	        	Fornecedores fornecedor = new Fornecedores();
+	        	fornecedor.setId(resultSet.getInt("id_fornecedores"));
+	        	fornecedor.setNome(resultSet.getString("nome"));
+	        	fornecedor.setEmail(resultSet.getString("email"));
+	        	fornecedor.setTelefone(resultSet.getString("telefone"));
+	        	fornecedor.setCelular(resultSet.getString("celular"));
+	        	fornecedor.setCpfCnpj(resultSet.getString("cpfcnpj"));
+	        	fornecedor.setEndereco(new Endereco(resultSet.getString("rua"), 
+	        			resultSet.getString("cep"), 
+	        			resultSet.getString("bairro"),
+	        			resultSet.getInt("num"),
+	        			resultSet.getString("complemento"),
+	        			resultSet.getString("cidade"),
+	        			resultSet.getString("estado")
+	        			));
+	        	ListFornecedores.add(fornecedor);
 	        }
 	        connection.close();
 	    }catch(Exception e) {
-	    	System.out.println("Não há Unidades salvas.");
+	    	System.out.println("Não há Fornecedores salvas.");
 	    }
 	
 
-	    return listaUnidade;
+	    return ListFornecedores;
 	}
 
 	static private Venda efetuarVendas(ArrayList<Produto> ListProdutos, ArrayList<Categoria> ListCategorias,
@@ -482,7 +608,7 @@ public class Main {
 
 	}
 
-	static public PessoaFisica cadastrarPessoaFisica(ArrayList<PessoaFisica> ListPessoaFisica) {
+	static public PessoaFisica cadastrarPessoaFisica(ArrayList<PessoaFisica> ListPessoaFisica, ArrayList<PessoaJuridica> ListPessoaJuridica) {
 		String nome, rua, cep, bairro, complemento, cidade, estado, email, telefone, celular, cpf;
 
 		nome = receberStrNaoNula("Informe o nome: ", "Informação inválida.");
@@ -499,7 +625,7 @@ public class Main {
 		cpf = digitarStrApenasNumero("Informe o seu CPF: ", "Número do celular inválido");
 
 		Endereco endereco = new Endereco(rua, cep, bairro, intnum, complemento, cidade, estado);
-		PessoaFisica pessoaFisica = new PessoaFisica(ListPessoaFisica.size() + 1, endereco, nome, email, telefone,
+		PessoaFisica pessoaFisica = new PessoaFisica(ListPessoaFisica.size()  + ListPessoaJuridica.size() +1, endereco, nome, email, telefone,
 				celular, cpf);
 		return pessoaFisica;
 
@@ -586,7 +712,7 @@ public class Main {
 		return dbdigitado;
 	}
 
-	static public PessoaJuridica cadastrarPessoaJuridica(ArrayList<PessoaJuridica> ListPessoaJuridica) {
+	static public PessoaJuridica cadastrarPessoaJuridica(ArrayList<PessoaJuridica> ListPessoaJuridica, ArrayList<PessoaFisica> ListPessoaFisica) {
 
 		boolean tudoOk;
 		String nome, rua, strnum, cep, bairro, complemento, cidade, estado, email, telefone, celular, cnpj;
@@ -606,7 +732,7 @@ public class Main {
 		cnpj = digitarStrApenasNumero("Informe o CNPJ: ", "Número do CNPJ inválido.");
 
 		Endereco endereco = new Endereco(rua, cep, bairro, intnum, complemento, cidade, estado);
-		PessoaJuridica pessoaJuridica = new PessoaJuridica(ListPessoaJuridica.size() + 1, endereco, nome, email,
+		PessoaJuridica pessoaJuridica = new PessoaJuridica(ListPessoaJuridica.size() + ListPessoaFisica.size()+ 1, endereco, nome, email,
 				telefone, celular, cnpj);
 		return pessoaJuridica;
 

@@ -4,6 +4,7 @@ public class ProdutoVendido {
 	private int idVenda, idProduto, idComprador;
 	private double qtd;
 	
+
 	public ProdutoVendido(int idVenda, int idProduto, int idComprador, double qtd) {
 		this.idVenda = idVenda;
 		this.idProduto = idProduto;
