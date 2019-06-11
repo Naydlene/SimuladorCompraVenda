@@ -12,7 +12,9 @@ public class Pessoa {
 	private String telefone;
 	private String celular;
 
-	public Pessoa() {}
+	public Pessoa() {
+	}
+
 	public Pessoa(int id, Endereco endereco, String nome, String email, String telefone, String celular) {
 		boolean conectou = false;
 		boolean tudoOk = true;
@@ -32,11 +34,10 @@ public class Pessoa {
 		} while (!conectou);
 		try {
 			stm = con.createStatement();
-			String StringQuery = "insert into pessoa values(" +
-			id + ",'" + nome + "','" + email + "','" + telefone + "','"+
-			celular + "','" + endereco.getRua() + "','" + endereco.getCep() + "','" + endereco.getBairro() + "'," +
-			endereco.getNum() + ",'" + endereco.getComplemento() + "','" + endereco.getCidade() + "','" +
-			endereco.getEstado() + "')";
+			String StringQuery = "insert into pessoa values(" + id + ",'" + nome + "','" + email + "','" + telefone
+					+ "','" + celular + "','" + endereco.getRua() + "','" + endereco.getCep() + "','"
+					+ endereco.getBairro() + "'," + endereco.getNum() + ",'" + endereco.getComplemento() + "','"
+					+ endereco.getCidade() + "','" + endereco.getEstado() + "')";
 			stm.execute(StringQuery);
 			con.close();
 		} catch (Exception e) {
@@ -65,7 +66,38 @@ public class Pessoa {
 	}
 
 	public void setEndereco(Endereco endereco) {
-		this.endereco = endereco;
+		boolean conectou = false;
+		boolean tudoOk = true;
+		Connection con = null;
+		Statement stm;
+		do {
+			try {
+				conectou = true;
+				con = ConectaBanco.criarConexao();
+			} catch (ClassNotFoundException e) {
+				conectou = false;
+				e.printStackTrace();
+			} catch (SQLException e) {
+				conectou = false;
+				e.printStackTrace();
+			}
+		} while (!conectou);
+		try {
+			stm = con.createStatement();
+			String StringQuery = "UPDATE pessoa set  rua = '" + endereco.getRua() + "', cep ='" + endereco.getCep()
+					+ "', bairro ='" + endereco.getBairro() + "', num = " + endereco.getNum() + ",complemento = '"
+					+ endereco.getComplemento() + "',cidade = '" + endereco.getCidade() + "', estado ='"
+					+ endereco.getEstado() + "' where id_pessoa = " + this.id;
+			stm.execute(StringQuery);
+			con.close();
+		} catch (Exception e) {
+			tudoOk = false;
+			e.printStackTrace();
+		}
+
+		if (tudoOk) {
+			this.endereco = endereco;
+		}
 	}
 
 	public int getId() {
@@ -81,7 +113,35 @@ public class Pessoa {
 	}
 
 	public void setNome(String nome) {
-		this.nome = nome;
+		boolean conectou = false;
+		boolean tudoOk = true;
+		Connection con = null;
+		Statement stm;
+		do {
+			try {
+				conectou = true;
+				con = ConectaBanco.criarConexao();
+			} catch (ClassNotFoundException e) {
+				conectou = false;
+				e.printStackTrace();
+			} catch (SQLException e) {
+				conectou = false;
+				e.printStackTrace();
+			}
+		} while (!conectou);
+		try {
+			stm = con.createStatement();
+			String StringQuery = "UPDATE pessoa SET nome = '" + nome + "' WHERE id_pessoa = " + this.id + ";";
+			stm.execute(StringQuery);
+			con.close();
+		} catch (Exception e) {
+			tudoOk = false;
+			e.printStackTrace();
+		}
+
+		if (tudoOk) {
+			this.nome = nome;
+		}
 	}
 
 	public String getEmail() {
@@ -89,7 +149,35 @@ public class Pessoa {
 	}
 
 	public void setEmail(String email) {
-		this.email = email;
+		boolean conectou = false;
+		boolean tudoOk = true;
+		Connection con = null;
+		Statement stm;
+		do {
+			try {
+				conectou = true;
+				con = ConectaBanco.criarConexao();
+			} catch (ClassNotFoundException e) {
+				conectou = false;
+				e.printStackTrace();
+			} catch (SQLException e) {
+				conectou = false;
+				e.printStackTrace();
+			}
+		} while (!conectou);
+		try {
+			stm = con.createStatement();
+			String StringQuery = "UPDATE pessoa SET email = '" + email + "' WHERE id_pessoa = " + this.id + ";";
+			stm.execute(StringQuery);
+			con.close();
+		} catch (Exception e) {
+			tudoOk = false;
+			e.printStackTrace();
+		}
+
+		if (tudoOk) {
+			this.email = email;
+		}
 	}
 
 	public String getTelefone() {
@@ -97,7 +185,35 @@ public class Pessoa {
 	}
 
 	public void setTelefone(String telefone) {
-		this.telefone = telefone;
+		boolean conectou = false;
+		boolean tudoOk = true;
+		Connection con = null;
+		Statement stm;
+		do {
+			try {
+				conectou = true;
+				con = ConectaBanco.criarConexao();
+			} catch (ClassNotFoundException e) {
+				conectou = false;
+				e.printStackTrace();
+			} catch (SQLException e) {
+				conectou = false;
+				e.printStackTrace();
+			}
+		} while (!conectou);
+		try {
+			stm = con.createStatement();
+			String StringQuery = "UPDATE pessoa SET telefone = '" + telefone + "' WHERE id_pessoa = " + this.id + ";";
+			stm.execute(StringQuery);
+			con.close();
+		} catch (Exception e) {
+			tudoOk = false;
+			e.printStackTrace();
+		}
+
+		if (tudoOk) {
+			this.telefone = telefone;
+		}
 	}
 
 	public String getCelular() {
@@ -105,7 +221,35 @@ public class Pessoa {
 	}
 
 	public void setCelular(String celular) {
-		this.celular = celular;
+		boolean conectou = false;
+		boolean tudoOk = true;
+		Connection con = null;
+		Statement stm;
+		do {
+			try {
+				conectou = true;
+				con = ConectaBanco.criarConexao();
+			} catch (ClassNotFoundException e) {
+				conectou = false;
+				e.printStackTrace();
+			} catch (SQLException e) {
+				conectou = false;
+				e.printStackTrace();
+			}
+		} while (!conectou);
+		try {
+			stm = con.createStatement();
+			String StringQuery = "UPDATE pessoa SET celular = '" + celular + "' WHERE id_pessoa = " + this.id + ";";
+			stm.execute(StringQuery);
+			con.close();
+		} catch (Exception e) {
+			tudoOk = false;
+			e.printStackTrace();
+		}
+
+		if (tudoOk) {
+			this.celular = celular;
+		}
 	}
 
 }

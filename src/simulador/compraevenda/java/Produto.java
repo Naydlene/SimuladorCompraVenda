@@ -27,7 +27,37 @@ public class Produto {
 	}
 
 	public void setFornecedores(Fornecedores fornecedores) {
-		this.fornecedores = fornecedores;
+		boolean conectou = false;
+		boolean tudoOk = true;
+		Connection con = null;
+		Statement stm;
+		do {
+			try {
+				conectou = true;
+				con = ConectaBanco.criarConexao();
+			} catch (ClassNotFoundException e) {
+				conectou = false;
+				e.printStackTrace();
+			} catch (SQLException e) {
+				conectou = false;
+				e.printStackTrace();
+			}
+		} while (!conectou);
+		try {
+			stm = con.createStatement();
+			String StringQuery = "UPDATE produto SET id_fornecedores = "
+					+ fornecedores.getId() +  " WHERE id_produto = "
+							+ this.id +";";
+			stm.execute(StringQuery);
+			con.close();
+		} catch (Exception e) {
+			tudoOk = false;
+			e.printStackTrace();
+		}
+
+		if (tudoOk) {
+			this.fornecedores = fornecedores;
+		}
 	}
 
 	public String getNome() {
@@ -35,7 +65,37 @@ public class Produto {
 	}
 
 	public void setNome(String nome) {
-		this.nome = nome;
+		boolean conectou = false;
+		boolean tudoOk = true;
+		Connection con = null;
+		Statement stm;
+		do {
+			try {
+				conectou = true;
+				con = ConectaBanco.criarConexao();
+			} catch (ClassNotFoundException e) {
+				conectou = false;
+				e.printStackTrace();
+			} catch (SQLException e) {
+				conectou = false;
+				e.printStackTrace();
+			}
+		} while (!conectou);
+		try {
+			stm = con.createStatement();
+			String StringQuery = "UPDATE produto SET nome = '"
+					+ nome +  "' WHERE id_produto = "
+							+ this.id +";";
+			stm.execute(StringQuery);
+			con.close();
+		} catch (Exception e) {
+			tudoOk = false;
+			e.printStackTrace();
+		}
+
+		if (tudoOk) {
+			this.nome = nome;
+		}
 	}
 
 	public double getPrecoVenda() {
@@ -43,7 +103,37 @@ public class Produto {
 	}
 
 	public void setPrecoVenda(double precoVenda) {
-		this.precoVenda = precoVenda;
+		boolean conectou = false;
+		boolean tudoOk = true;
+		Connection con = null;
+		Statement stm;
+		do {
+			try {
+				conectou = true;
+				con = ConectaBanco.criarConexao();
+			} catch (ClassNotFoundException e) {
+				conectou = false;
+				e.printStackTrace();
+			} catch (SQLException e) {
+				conectou = false;
+				e.printStackTrace();
+			}
+		} while (!conectou);
+		try {
+			stm = con.createStatement();
+			String StringQuery = "UPDATE produto SET precovenda = "
+					+ precoVenda +  " WHERE id_produto = "
+							+ this.id +";";
+			stm.execute(StringQuery);
+			con.close();
+		} catch (Exception e) {
+			tudoOk = false;
+			e.printStackTrace();
+		}
+
+		if (tudoOk) {
+			this.precoVenda = precoVenda;
+		}
 	}
 
 	public int getQtde_estoque() {
@@ -51,7 +141,37 @@ public class Produto {
 	}
 
 	public void setQtde_estoque(int qtde_estoque) {
-		this.qtde_estoque = qtde_estoque;
+		boolean conectou = false;
+		boolean tudoOk = true;
+		Connection con = null;
+		Statement stm;
+		do {
+			try {
+				conectou = true;
+				con = ConectaBanco.criarConexao();
+			} catch (ClassNotFoundException e) {
+				conectou = false;
+				e.printStackTrace();
+			} catch (SQLException e) {
+				conectou = false;
+				e.printStackTrace();
+			}
+		} while (!conectou);
+		try {
+			stm = con.createStatement();
+			String StringQuery = "UPDATE produto SET qtd_estoque = "
+					+ qtde_estoque +  " WHERE id_produto = "
+							+ this.id +";";
+			stm.execute(StringQuery);
+			con.close();
+		} catch (Exception e) {
+			tudoOk = false;
+			e.printStackTrace();
+		}
+
+		if (tudoOk) {
+			this.qtde_estoque = qtde_estoque;
+		}
 	}
 
 	public Produto() {
@@ -104,7 +224,37 @@ public class Produto {
 	}
 
 	public void setCategoria(Categoria categoria) {
-		this.categoria = categoria;
+		boolean conectou = false;
+		boolean tudoOk = true;
+		Connection con = null;
+		Statement stm;
+		do {
+			try {
+				conectou = true;
+				con = ConectaBanco.criarConexao();
+			} catch (ClassNotFoundException e) {
+				conectou = false;
+				e.printStackTrace();
+			} catch (SQLException e) {
+				conectou = false;
+				e.printStackTrace();
+			}
+		} while (!conectou);
+		try {
+			stm = con.createStatement();
+			String StringQuery = "UPDATE produto SET id_categoria = "
+					+ categoria.getId() +  " WHERE id_produto = "
+							+ this.id +";";
+			stm.execute(StringQuery);
+			con.close();
+		} catch (Exception e) {
+			tudoOk = false;
+			e.printStackTrace();
+		}
+
+		if (tudoOk) {
+			this.categoria = categoria;
+		}
 	}
 
 	public int getQtd_produtos() {

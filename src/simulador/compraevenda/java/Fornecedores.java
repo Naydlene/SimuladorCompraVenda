@@ -84,7 +84,38 @@ public class Fornecedores {
 	}
 
 	public void setEndereco(Endereco endereco) {
-		this.endereco = endereco;
+		boolean conectou = false;
+		boolean tudoOk = true;
+		Connection con = null;
+		Statement stm;
+		do {
+			try {
+				conectou = true;
+				con = ConectaBanco.criarConexao();
+			} catch (ClassNotFoundException e) {
+				conectou = false;
+				e.printStackTrace();
+			} catch (SQLException e) {
+				conectou = false;
+				e.printStackTrace();
+			}
+		} while (!conectou);
+		try {
+			stm = con.createStatement();
+			String StringQuery = "UPDATE fornecedores set  rua = '" + endereco.getRua() + "', cep ='" + endereco.getCep()
+					+ "', bairro ='" + endereco.getBairro() + "', num = " + endereco.getNum() + ",complemento = '"
+					+ endereco.getComplemento() + "',cidade = '" + endereco.getCidade() + "', estado ='"
+					+ endereco.getEstado() + "' where id_fornecedores = " + this.id;
+			stm.execute(StringQuery);
+			con.close();
+		} catch (Exception e) {
+			tudoOk = false;
+			e.printStackTrace();
+		}
+
+		if (tudoOk) {
+			this.endereco = endereco;
+		}
 	}
 
 	public String getNome() {
@@ -92,7 +123,35 @@ public class Fornecedores {
 	}
 
 	public void setNome(String nome) {
-		this.nome = nome;
+		boolean conectou = false;
+		boolean tudoOk = true;
+		Connection con = null;
+		Statement stm;
+		do {
+			try {
+				conectou = true;
+				con = ConectaBanco.criarConexao();
+			} catch (ClassNotFoundException e) {
+				conectou = false;
+				e.printStackTrace();
+			} catch (SQLException e) {
+				conectou = false;
+				e.printStackTrace();
+			}
+		} while (!conectou);
+		try {
+			stm = con.createStatement();
+			String StringQuery = "UPDATE fornecedores SET nome = '" + nome + "' WHERE id_fornecedores = " + this.id + ";";
+			stm.execute(StringQuery);
+			con.close();
+		} catch (Exception e) {
+			tudoOk = false;
+			e.printStackTrace();
+		}
+
+		if (tudoOk) {
+			this.nome = nome;
+		}
 	}
 
 	public String getEmail() {
@@ -100,15 +159,73 @@ public class Fornecedores {
 	}
 
 	public void setEmail(String email) {
-		this.email = email;
+		boolean conectou = false;
+		boolean tudoOk = true;
+		Connection con = null;
+		Statement stm;
+		do {
+			try {
+				conectou = true;
+				con = ConectaBanco.criarConexao();
+			} catch (ClassNotFoundException e) {
+				conectou = false;
+				e.printStackTrace();
+			} catch (SQLException e) {
+				conectou = false;
+				e.printStackTrace();
+			}
+		} while (!conectou);
+		try {
+			stm = con.createStatement();
+			String StringQuery = "UPDATE fornecedores SET email = '" + email + "' WHERE id_fornecedores= " + this.id + ";";
+			stm.execute(StringQuery);
+			con.close();
+		} catch (Exception e) {
+			tudoOk = false;
+			e.printStackTrace();
+		}
+
+		if (tudoOk) {
+			this.email = email;
+		}
 	}
 
 	public String getTelefone() {
+	
 		return telefone;
+		
 	}
 
 	public void setTelefone(String telefone) {
-		this.telefone = telefone;
+		boolean conectou = false;
+		boolean tudoOk = true;
+		Connection con = null;
+		Statement stm;
+		do {
+			try {
+				conectou = true;
+				con = ConectaBanco.criarConexao();
+			} catch (ClassNotFoundException e) {
+				conectou = false;
+				e.printStackTrace();
+			} catch (SQLException e) {
+				conectou = false;
+				e.printStackTrace();
+			}
+		} while (!conectou);
+		try {
+			stm = con.createStatement();
+			String StringQuery = "UPDATE fornecedores SET telefone = '" + telefone + "' WHERE id_fornecedores = " + this.id + ";";
+			stm.execute(StringQuery);
+			con.close();
+		} catch (Exception e) {
+			tudoOk = false;
+			e.printStackTrace();
+		}
+
+		if (tudoOk) {
+			this.telefone = telefone;
+		}
 	}
 
 	public String getCelular() {
@@ -124,7 +241,35 @@ public class Fornecedores {
 	}
 
 	public void setId(int id) {
-		this.id = id;
-	}
+		boolean conectou = false;
+		boolean tudoOk = true;
+		Connection con = null;
+		Statement stm;
+		do {
+			try {
+				conectou = true;
+				con = ConectaBanco.criarConexao();
+			} catch (ClassNotFoundException e) {
+				conectou = false;
+				e.printStackTrace();
+			} catch (SQLException e) {
+				conectou = false;
+				e.printStackTrace();
+			}
+		} while (!conectou);
+		try {
+			stm = con.createStatement();
+			String StringQuery = "UPDATE fornecedores SET celular = '" + celular + "' WHERE id_fornecedores = " + this.id + ";";
+			stm.execute(StringQuery);
+			con.close();
+		} catch (Exception e) {
+			tudoOk = false;
+			e.printStackTrace();
+		}
 
+		if (tudoOk) {
+			this.id = id;
+		}
+
+	}
 }

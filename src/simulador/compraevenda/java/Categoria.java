@@ -15,6 +15,7 @@ public class Categoria {
 		boolean conectou = false;
 		boolean tudoOk = true;
 		Connection con = null;
+		//classe que executa as acoes no banco.
 		Statement stm;
 		do {
 			try {
@@ -64,7 +65,37 @@ public class Categoria {
 
 
 	public void setDescricao(String descricao) {
-		this.descricao = descricao;
+		boolean conectou = false;
+		boolean tudoOk = true;
+		Connection con = null;
+		Statement stm;
+		do {
+			try {
+				conectou = true;
+				con = ConectaBanco.criarConexao();
+			} catch (ClassNotFoundException e) {
+				conectou = false;
+				e.printStackTrace();
+			} catch (SQLException e) {
+				conectou = false;
+				e.printStackTrace();
+			}
+		} while (!conectou);
+		try {
+			stm = con.createStatement();
+			String StringQuery = "UPDATE categoria SET descricao = '"
+					+ descricao +  "'	 WHERE id_categoria = "
+							+ this.id +";";
+			stm.execute(StringQuery);
+			con.close();
+		} catch (Exception e) {
+			tudoOk = false;
+			e.printStackTrace();
+		}
+
+		if (tudoOk) {
+			this.descricao = descricao;
+		}
 	}
 
 	Categoria(String descricao, int id){

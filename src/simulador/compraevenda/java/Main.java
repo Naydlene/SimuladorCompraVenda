@@ -8,63 +8,60 @@ import java.sql.SQLException;
 import java.text.DecimalFormat;
 import java.util.ArrayList;
 
-
-
-
 public class Main {
 
 	static Scanner input = new Scanner(System.in);
 
 	public static void main(String[] args) {
-		ArrayList<Categoria> ListCategorias; //ok
-		ArrayList<Unidade> ListUnidade; //ok
-		ArrayList<Fornecedores> ListFornecedores; //ok
-		ArrayList<Produto> ListProdutos; //ok
-		ArrayList<PessoaFisica> ListPessoaFisica;
-		ArrayList<PessoaJuridica> ListPessoaJuridica;
-		
-		
-		ArrayList<Venda> ListVendas = new ArrayList<>();
-		
-		
+		ArrayList<Categoria> ListCategorias; // ok
+		ArrayList<Unidade> ListUnidade; // ok
+		ArrayList<Fornecedores> ListFornecedores; // ok
+		ArrayList<Produto> ListProdutos; // ok
+		ArrayList<PessoaFisica> ListPessoaFisica; // ok
+		ArrayList<PessoaJuridica> ListPessoaJuridica; // ok
+		ArrayList<Venda> ListVendas; //ok
+
 		try {
 			ListCategorias = InicializaListCategorias();
-		}catch(Exception e) {
+		} catch (Exception e) {
 			ListCategorias = new ArrayList<>();
 		}
 		try {
 			ListUnidade = InicializaUnidades();
-		}catch(Exception e) {
+		} catch (Exception e) {
 			ListUnidade = new ArrayList<>();
 		}
 		try {
 			ListFornecedores = InicializaFornecedores();
-		}catch(Exception e) {
+		} catch (Exception e) {
 			ListFornecedores = new ArrayList<>();
 		}
 		try {
 			ListProdutos = InicializaProdutos(ListCategorias, ListUnidade, ListFornecedores);
-		}catch(Exception e) {
+		} catch (Exception e) {
 			ListProdutos = new ArrayList<>();
 		}
 		try {
 			ListPessoaFisica = InicializaPessoaFisica();
-		}catch(Exception e) {
+		} catch (Exception e) {
 			ListPessoaFisica = new ArrayList<>();
 		}
 		try {
 			ListPessoaJuridica = InicializaPessoaJuridica();
-		}catch(Exception e) {
+		} catch (Exception e) {
 			ListPessoaJuridica = new ArrayList<>();
 		}
-			
-		
+		//try {
+		//	ListVendas = InicializaVenda();
+		//} catch (Exception e) {
+			ListVendas = new ArrayList<>();
+		//}
+
 		Usuario usuario = new Usuario();
 		String novoUsuario = "a";
 		usuario.setLogin(novoUsuario);
 		String senha = "a";
 		usuario.setSenha(senha);
-		
 
 		String stropcao;
 		int opcao = 999;
@@ -79,9 +76,10 @@ public class Main {
 
 				} while (!novoUsuario.equals(usuario.getLogin()) || !senha.equals(usuario.getSenha()));
 				do {
-					System.out.println("\nDigite: \n 1 - Cadastrar produtos.\n " + "2 - Cadastrar categorias.\n "
-							+ "3 - Cadastrar clientes.\n " + "4 - Cadastrar fornecedores.\n "
-							+ "5 - Efetuar compras(abastecimento de estoque).\n " + "6 - Efetuar venda.\n ");
+					System.out.println("\nDigite: \n 1 - Produtos.\n " + "2 - Categorias.\n " + "3 - Clientes.\n "
+							+ "4 - Fornecedores.\n " + "5 - Efetuar compras(abastecimento de estoque).\n "
+							+ "6 - Efetuar venda.\n " + "7 - Visualizar compras anteriores de um dado cliente.\n "
+							+ "8 - Visualizar Relatorio de vendas por data \n");
 
 					stropcao = input.nextLine();
 					try {
@@ -231,6 +229,14 @@ public class Main {
 					case 6:
 						ListVendas.add(efetuarVendas(ListProdutos, ListCategorias, ListPessoaFisica, ListPessoaJuridica,
 								ListVendas));
+						break;
+
+					case 7:
+						comprasCliente(ListPessoaFisica, ListPessoaJuridica);
+						break;
+					case 8:
+						relatorioVendasData();
+						break;
 					}
 
 				} while (opcao != 0);
@@ -239,185 +245,293 @@ public class Main {
 			}
 		} while (opcao != 0);
 	}
+	static public void relatorioVendasData() {
+		int anoInicial, mesInicial, diaInicial;
+		int anoFinal, mesFinal, diaFinal;
+		boolean dataOk = true;
+		do {
+			dataOk = true;
+			anoInicial = digitarNumero("Ano Inicio","Informação inválida");
+			mesInicial = digitarNumero("Mes Inicio","Informação inválida");
+			diaInicial = digitarNumero("Dia Inicio","Informação inválida");
+			
+			anoFinal = digitarNumero("Ano Final","Informação inválida");
+			mesFinal = digitarNumero("Mes Final","Informação inválida");
+			diaFinal = digitarNumero("Dia Final","Informação inválida");
+			
+			if(anoInicial > anoFinal)
+				dataOk=false;
+			else
+				if(mesInicial > mesFinal)
+					dataOk = false;
+				else 
+					if(diaInicial > diaFinal)
+						dataOk = false;
+		}while(!dataOk);
+		
+		try {
+			Connection connection = ConectaBanco.criarConexao();
+			PreparedStatement statement = connection.prepareStatement("select * from venda where momentocompra between '"
+			+anoInicial+"-"+mesInicial+"-"+diaInicial+
+			"' and '"
+			+anoFinal+"-"+mesFinal+"-"+diaFinal+
+			"' order by id_comprador, id_venda;");
+			ResultSet resultSet = statement.executeQuery();
+			while (resultSet.next()) {
+				System.out.println("Id Comprador = " + resultSet.getInt("id_comprador"));
+				System.out.println("Id Venda = " + resultSet.getInt("id_venda"));
+				System.out.println("Preco Toral = " + resultSet.getDouble("precototal"));
+				System.out.println("Preco Liquido = " + resultSet.getDouble("precoLiquido"));
+				System.out.println("Desconto = " + resultSet.getDouble("descPorc"));
+				System.out.println("Data = " + resultSet.getString("momentocompra"));
+				System.out.println("---------------------");
+			}
+			connection.close();
+		} catch (Exception e) {
+			System.out.println("Datas incorretas.");
+		}
+		
+		
+	}
+	static public void comprasCliente(ArrayList<PessoaFisica> ListPessoaFisica, ArrayList<PessoaJuridica> ListPessoaJuridica) {
+		int tipoCliente = 0, codPessoaFisica =0, codPessoaJuridica=0, codPessoaselecionada = 0;
+
+		do {
+			tipoCliente = digitarNumero("Informe o tipo de cliente: \n1 - Físico \n2 - Jurídico: \n",
+					"Informação inválida");
+		} while (tipoCliente != 1 && tipoCliente != 2);
+
+		if (tipoCliente == 1) {
+			do {
+				if (!exibirListaPessoaFisica(ListPessoaFisica, 2))
+					return;
+				codPessoaFisica = digitarNumero("Informe o código do cliente: ", "Informação inválida");
+			} while (!confirmarPessoaFisica(ListPessoaFisica, codPessoaFisica));
+			codPessoaselecionada = codPessoaFisica;
+		} else if (tipoCliente == 2) {
+			do {
+				if (!exibirListaPessoaJuridica(ListPessoaJuridica, 2))
+					return;
+				codPessoaJuridica = digitarNumero("Informe o código do cliente: ", "Informação inválida");
+			} while (!confirmarPessoaJuridica(ListPessoaJuridica, codPessoaJuridica));
+			codPessoaselecionada = codPessoaJuridica;
+		}
+		
+		try {
+			Connection connection = ConectaBanco.criarConexao();
+			PreparedStatement statement = connection.prepareStatement("SELECT * FROM Venda where id_comprador = " + codPessoaselecionada);
+			ResultSet resultSet = statement.executeQuery();
+			while (resultSet.next()) {
+				System.out.println("Id Venda = " + resultSet.getInt("id_venda"));
+				System.out.println("Preco Total = " + resultSet.getDouble("precototal"));
+				System.out.println("Preco Liquido = " + resultSet.getDouble("precoLiquido"));
+				System.out.println("Desconto = " + resultSet.getDouble("descPorc"));
+				System.out.println("Data = " + resultSet.getString("momentocompra"));
+				System.out.println("---------------------");
+			}
+			connection.close();
+		} catch (Exception e) {
+			System.out.println("Não há vendas salvas.");
+		}
+		
+	}
 
 	static public ArrayList<PessoaJuridica> InicializaPessoaJuridica() throws SQLException {
 		ArrayList<PessoaJuridica> ListPessoaJuridica = new ArrayList<>();
-	    try {
-	        Connection connection = ConectaBanco.criarConexao();
-	        PreparedStatement statement = connection.prepareStatement
-	        ("select p.*, pj.cnpj from pessoa p join pessoajuridica pj ON (p.id_pessoa = pj.id_pessoa)");
-	        ResultSet resultSet = statement.executeQuery();
-	        while (resultSet.next()) {
-	        	PessoaJuridica pessoajuridica = new PessoaJuridica();
-	        	pessoajuridica.setId(resultSet.getInt("id_pessoa"));
-	        	pessoajuridica.setNome(resultSet.getString("nome"));
-	        	pessoajuridica.setEmail(resultSet.getString("email"));
-	        	pessoajuridica.setTelefone(resultSet.getString("telefone"));
-	        	pessoajuridica.setCelular(resultSet.getString("celular"));
-	        	pessoajuridica.setCnpj(resultSet.getString("cnpj"));
-	        	pessoajuridica.setEndereco(new Endereco(resultSet.getString("rua"), 
-	        			resultSet.getString("cep"), 
-	        			resultSet.getString("bairro"),
-	        			resultSet.getInt("num"),
-	        			resultSet.getString("complemento"),
-	        			resultSet.getString("cidade"),
-	        			resultSet.getString("estado")
-	        			));
-	        	ListPessoaJuridica.add(pessoajuridica);
-	        }
-	        connection.close();
-	    }catch(Exception e) {
-	    	System.out.println("Não há Fornecedores salvas.");
-	    }
-	
+		try {
+			Connection connection = ConectaBanco.criarConexao();
+			PreparedStatement statement = connection.prepareStatement(
+					"select p.*, pj.cnpj from pessoa p join pessoajuridica pj ON (p.id_pessoa = pj.id_pessoa)");
+			ResultSet resultSet = statement.executeQuery();
+			while (resultSet.next()) {
+				PessoaJuridica pessoajuridica = new PessoaJuridica();
+				pessoajuridica.setId(resultSet.getInt("id_pessoa"));
+				pessoajuridica.setNome(resultSet.getString("nome"));
+				pessoajuridica.setEmail(resultSet.getString("email"));
+				pessoajuridica.setTelefone(resultSet.getString("telefone"));
+				pessoajuridica.setCelular(resultSet.getString("celular"));
+				pessoajuridica.setCnpj(resultSet.getString("cnpj"));
+				pessoajuridica.setEndereco(new Endereco(resultSet.getString("rua"), resultSet.getString("cep"),
+						resultSet.getString("bairro"), resultSet.getInt("num"), resultSet.getString("complemento"),
+						resultSet.getString("cidade"), resultSet.getString("estado")));
+				ListPessoaJuridica.add(pessoajuridica);
+			}
+			connection.close();
+		} catch (Exception e) {
+			System.out.println("Não há Fornecedores salvas.");
+		}
 
-	    return ListPessoaJuridica;
+		return ListPessoaJuridica;
+	}
+
+	// ArrayList<Venda> ListVendas;
+	static public ArrayList<Venda> InicializaVenda() throws SQLException {
+		ArrayList<Venda> ListVendas = new ArrayList<Venda>();
+
+		try {
+			Connection connection = ConectaBanco.criarConexao();
+			PreparedStatement statement = connection.prepareStatement("SELECT * FROM Venda");
+			ResultSet resultSet = statement.executeQuery();
+			while (resultSet.next()) {
+				Venda venda = new Venda();
+				venda.setIdVenda(resultSet.getInt("id_venda"));
+				venda.setPrecototal(resultSet.getDouble("precototal"));
+				venda.setPrecoLiquido(resultSet.getDouble("precoLiquido"));
+				venda.setDescPorc(resultSet.getDouble("descPorc"));
+				venda.setIdComprador(resultSet.getInt("id_comprador"));
+				venda.setMomentoCompra(resultSet.getString("momentocompra"));
+				ListVendas.add(venda);
+			}
+			connection.close();
+		} catch (Exception e) {
+			System.out.println("Não há vendas salvas.");
+		}
+
+		return ListVendas;
 	}
 
 	static public ArrayList<PessoaFisica> InicializaPessoaFisica() throws SQLException {
 		ArrayList<PessoaFisica> ListPessoaFisica = new ArrayList<>();
-	    try {
-	        Connection connection = ConectaBanco.criarConexao();
-	        PreparedStatement statement = connection.prepareStatement
-	        ("select p.*, pf.cpf from pessoa p join pessoafisica pf ON (p.id_pessoa = pf.id_pessoa)");
-	        ResultSet resultSet = statement.executeQuery();
-	        while (resultSet.next()) {
-	        	PessoaFisica pessoafisica = new PessoaFisica();
-	        	pessoafisica.setId(resultSet.getInt("id_pessoa"));
-	        	pessoafisica.setNome(resultSet.getString("nome"));
-	        	pessoafisica.setEmail(resultSet.getString("email"));
-	        	pessoafisica.setTelefone(resultSet.getString("telefone"));
-	        	pessoafisica.setCelular(resultSet.getString("celular"));
-	        	pessoafisica.setCpf(resultSet.getString("cpf"));
-	        	pessoafisica.setEndereco(new Endereco(resultSet.getString("rua"), 
-	        			resultSet.getString("cep"), 
-	        			resultSet.getString("bairro"),
-	        			resultSet.getInt("num"),
-	        			resultSet.getString("complemento"),
-	        			resultSet.getString("cidade"),
-	        			resultSet.getString("estado")
-	        			));
-	        	ListPessoaFisica.add(pessoafisica);
-	        }
-	        connection.close();
-	    }catch(Exception e) {
-	    	System.out.println("Não há PessoasFisicas salvas.");
-	    }
-	
+		try {
+			Connection connection = ConectaBanco.criarConexao();
+			PreparedStatement statement = connection.prepareStatement(
+					"select p.*, pf.cpf from pessoa p join pessoafisica pf ON (p.id_pessoa = pf.id_pessoa)");
+			ResultSet resultSet = statement.executeQuery();
+			while (resultSet.next()) {
+				PessoaFisica pessoafisica = new PessoaFisica();
+				pessoafisica.setId(resultSet.getInt("id_pessoa"));
+				pessoafisica.setNome(resultSet.getString("nome"));
+				pessoafisica.setEmail(resultSet.getString("email"));
+				pessoafisica.setTelefone(resultSet.getString("telefone"));
+				pessoafisica.setCelular(resultSet.getString("celular"));
+				pessoafisica.setCpf(resultSet.getString("cpf"));
+				pessoafisica.setEndereco(new Endereco(resultSet.getString("rua"), resultSet.getString("cep"),
+						resultSet.getString("bairro"), resultSet.getInt("num"), resultSet.getString("complemento"),
+						resultSet.getString("cidade"), resultSet.getString("estado")));
+				ListPessoaFisica.add(pessoafisica);
+			}
+			connection.close();
+		} catch (Exception e) {
+			System.out.println("Não há PessoasFisicas salvas.");
+		}
 
-	    return ListPessoaFisica;
+		return ListPessoaFisica;
 	}
 
-	
-	static public ArrayList<Produto> InicializaProdutos(ArrayList<Categoria> ListCategorias, ArrayList<Unidade> ListUnidade, ArrayList<Fornecedores> ListFornecedores) throws SQLException {
+	static public ArrayList<Produto> InicializaProdutos(ArrayList<Categoria> ListCategorias,
+			ArrayList<Unidade> ListUnidade, ArrayList<Fornecedores> ListFornecedores) throws SQLException {
 		ArrayList<Produto> ListProdutos = new ArrayList<Produto>();
 
-	    try {
-	        Connection connection = ConectaBanco.criarConexao();
-	        PreparedStatement statement = connection.prepareStatement
-	        ("SELECT * FROM produto");
-	        ResultSet resultSet = statement.executeQuery();
-	        while (resultSet.next()) {
-	        	Produto produto = new Produto();
-	        	produto.setId (resultSet.getInt("id_produto"));
-	        	produto.setNome (resultSet.getString("nome"));
-	        	produto.setPrecoVenda(resultSet.getDouble("precovenda"));
-	        	produto.setQtde_estoque(resultSet.getInt("qtd_estoque"));
-	        	produto.setQtd_produtos(resultSet.getInt("qtd_produtos"));
-	        	produto.setCategoria(retornarCategoria(ListCategorias, resultSet.getInt("id_categoria")));
-	        	produto.setFornecedores(retornarFornecedores(ListFornecedores, resultSet.getInt("id_fornecedores")));
-	        	produto.setUnidade(retornarUnidades(ListUnidade, resultSet.getInt("id_unidade")));
-	        	ListProdutos.add(produto);
-	        }
-	        connection.close();
-	    }catch(Exception e) {
-	    	System.out.println("Não há produtos salvas.");
-	    }
-	
+		try {
+			Connection connection = ConectaBanco.criarConexao();
+			PreparedStatement statement = connection.prepareStatement("SELECT * FROM produto");
+			ResultSet resultSet = statement.executeQuery();
+			while (resultSet.next()) {
+				Produto produto = new Produto();
+				produto.setId(resultSet.getInt("id_produto"));
+				produto.setNome(resultSet.getString("nome"));
+				produto.setPrecoVenda(resultSet.getDouble("precovenda"));
+				produto.setQtde_estoque(resultSet.getInt("qtd_estoque"));
+				produto.setQtd_produtos(resultSet.getInt("qtd_produtos"));
+				produto.setCategoria(retornarCategoria(ListCategorias, resultSet.getInt("id_categoria")));
+				produto.setFornecedores(retornarFornecedores(ListFornecedores, resultSet.getInt("id_fornecedores")));
+				produto.setUnidade(retornarUnidades(ListUnidade, resultSet.getInt("id_unidade")));
+				ListProdutos.add(produto);
+			}
+			connection.close();
+		} catch (Exception e) {
+			System.out.println("Não há produtos salvas.");
+		}
 
-	    return ListProdutos;
+		return ListProdutos;
 	}
-	
-	
+
 	static public ArrayList<Unidade> InicializaUnidades() throws SQLException {
 		ArrayList<Unidade> listaUnidade = new ArrayList<Unidade>();
 
-	    try {
-	        Connection connection = ConectaBanco.criarConexao();
-	        PreparedStatement statement = connection.prepareStatement("SELECT id_unidade, nome FROM unidade");
-	        ResultSet resultSet = statement.executeQuery();
-	        while (resultSet.next()) {
-	        	Unidade unidade = new Unidade();
-	        	unidade.setId(resultSet.getInt("id_unidade"));
-	        	unidade.setNome(resultSet.getString("nome"));
-	        	listaUnidade.add(unidade);
-	        }
-	        connection.close();
-	    }catch(Exception e) {
-	    	System.out.println("Não há Unidades salvas.");
-	    }
-	
+		try {
+			Connection connection = ConectaBanco.criarConexao();
+			PreparedStatement statement = connection.prepareStatement("SELECT * FROM unidade");
+			ResultSet resultSet = statement.executeQuery();
+			while (resultSet.next()) {
+				Unidade unidade = new Unidade();
+				unidade.setId(resultSet.getInt("id_unidade"));
+				unidade.setNome(resultSet.getString("nome"));
+				listaUnidade.add(unidade);
+			}
+			connection.close();
+		} catch (Exception e) {
+			System.out.println("Não há Unidades salvas.");
+		}
 
-	    return listaUnidade;
+		return listaUnidade;
 	}
-	
+
 	static public ArrayList<Categoria> InicializaListCategorias() throws SQLException {
 		ArrayList<Categoria> listaCategoria = new ArrayList<Categoria>();
 
-	    try {
-	        Connection connection = ConectaBanco.criarConexao();
-	        PreparedStatement statement = connection.prepareStatement("SELECT id_categoria, descricao FROM categoria");
-	        ResultSet resultSet = statement.executeQuery();
-	        while (resultSet.next()) {
-	        	Categoria categoria = new Categoria();
-	        	categoria.setId(resultSet.getInt("id_categoria"));
-	        	categoria.setDescricao(resultSet.getString("descricao"));
-	        	listaCategoria.add(categoria);
-	        }
-	        connection.close();
-	    }catch(Exception e) {
-	    	System.out.println("Não há categorias salvas.");
-	    }
-	
+		try {
+			Connection connection = ConectaBanco.criarConexao();
+			PreparedStatement statement = connection.prepareStatement("SELECT * FROM categoria");
+			ResultSet resultSet = statement.executeQuery();
+			while (resultSet.next()) {
+				Categoria categoria = new Categoria();
+				categoria.setId(resultSet.getInt("id_categoria"));
+				categoria.setDescricao(resultSet.getString("descricao"));
+				listaCategoria.add(categoria);
+			}
+			connection.close();
+		} catch (Exception e) {
+			System.out.println("Não há categorias salvas.");
+		}
 
-	    return listaCategoria;
+		return listaCategoria;
 	}
 
 	static public ArrayList<Fornecedores> InicializaFornecedores() throws SQLException {
 		ArrayList<Fornecedores> ListFornecedores = new ArrayList<>();
-	    try {
-	        Connection connection = ConectaBanco.criarConexao();
-	        PreparedStatement statement = connection.prepareStatement
-	        ("SELECT id_fornecedores, nome, email, telefone, celular, cpfcnpj,"
-	        + "rua, cep, bairro, num, complemento, cidade, estado FROM fornecedores");
-	        ResultSet resultSet = statement.executeQuery();
-	        while (resultSet.next()) {
-	        	Fornecedores fornecedor = new Fornecedores();
-	        	fornecedor.setId(resultSet.getInt("id_fornecedores"));
-	        	fornecedor.setNome(resultSet.getString("nome"));
-	        	fornecedor.setEmail(resultSet.getString("email"));
-	        	fornecedor.setTelefone(resultSet.getString("telefone"));
-	        	fornecedor.setCelular(resultSet.getString("celular"));
-	        	fornecedor.setCpfCnpj(resultSet.getString("cpfcnpj"));
-	        	fornecedor.setEndereco(new Endereco(resultSet.getString("rua"), 
-	        			resultSet.getString("cep"), 
-	        			resultSet.getString("bairro"),
-	        			resultSet.getInt("num"),
-	        			resultSet.getString("complemento"),
-	        			resultSet.getString("cidade"),
-	        			resultSet.getString("estado")
-	        			));
-	        	ListFornecedores.add(fornecedor);
-	        }
-	        connection.close();
-	    }catch(Exception e) {
-	    	System.out.println("Não há Fornecedores salvas.");
-	    }
-	
+		try {
+			Connection connection = ConectaBanco.criarConexao();
+			PreparedStatement statement = connection.prepareStatement("SELECT * FROM fornecedores");
+			ResultSet resultSet = statement.executeQuery();
+			while (resultSet.next()) {
+				Fornecedores fornecedor = new Fornecedores();
+				fornecedor.setId(resultSet.getInt("id_fornecedores"));
+				fornecedor.setNome(resultSet.getString("nome"));
+				fornecedor.setEmail(resultSet.getString("email"));
+				fornecedor.setTelefone(resultSet.getString("telefone"));
+				fornecedor.setCelular(resultSet.getString("celular"));
+				fornecedor.setCpfCnpj(resultSet.getString("cpfcnpj"));
+				fornecedor.setEndereco(new Endereco(resultSet.getString("rua"), resultSet.getString("cep"),
+						resultSet.getString("bairro"), resultSet.getInt("num"), resultSet.getString("complemento"),
+						resultSet.getString("cidade"), resultSet.getString("estado")));
+				ListFornecedores.add(fornecedor);
+			}
+			connection.close();
+		} catch (Exception e) {
+			System.out.println("Não há Fornecedores salvas.");
+		}
 
-	    return ListFornecedores;
+		return ListFornecedores;
 	}
-
+	static private int pegaMaxIdVenda() {
+		int idvenda = 0;
+		try {
+			Connection connection = ConectaBanco.criarConexao();
+			PreparedStatement statement = connection
+					.prepareStatement("select max(id_venda) from venda;");
+			ResultSet resultSet = statement.executeQuery();
+			while (resultSet.next()) {
+				idvenda = resultSet.getInt("max");
+			}
+			connection.close();
+		} catch (Exception e) {
+			System.out.println("Não há tabela venda salvas.");
+		}
+		
+		return idvenda;
+	}
+	
 	static private Venda efetuarVendas(ArrayList<Produto> ListProdutos, ArrayList<Categoria> ListCategorias,
 			ArrayList<PessoaFisica> ListPessoaFisica, ArrayList<PessoaJuridica> ListPessoaJuridica,
 			ArrayList<Venda> ListVendas) {
@@ -427,25 +541,24 @@ public class Main {
 		Categoria categoria;
 		PessoaFisica pessoaFisica;
 		PessoaJuridica pessoaJuridica;
-		String resultado;
-		String strPrecoTotal;
+		String strPrecoTotalLiquido;
 		int codProd;
 		int codPessoaFisica;
 		int codPessoaJuridica;
-		int codPessoaselecionada=-1;
+		int codPessoaselecionada = -1;
 		double preco;
-		double precoDesc=0;
+		double precoDesc = 0;
 		double desconto;
-		double total = 0;
-		double precoTotalDesc;
+		double precoTotalDesc = 0;
 		int quantidade;
 		int qtdItens;
-		int idVenda;
+		double totalBruto = 0;
 		int tipoCliente;
 		do {
-			tipoCliente = digitarNumero("Informe o tipo de cliente: \n1 - Físico \n2 - Jurídico: \n", "Informação inválida");
-		}while(tipoCliente != 1 && tipoCliente != 2);
-			
+			tipoCliente = digitarNumero("Informe o tipo de cliente: \n1 - Físico \n2 - Jurídico: \n",
+					"Informação inválida");
+		} while (tipoCliente != 1 && tipoCliente != 2);
+
 		if (tipoCliente == 1) {
 			do {
 				if (!exibirListaPessoaFisica(ListPessoaFisica, 2))
@@ -474,7 +587,7 @@ public class Main {
 			System.out.println("O preço do produto é: " + produto.getPrecoVenda());
 			do {
 				qtdItens = digitarNumero("Informe a quantidade de itens: ", "\nQuantidade inválida.");
-				
+
 				if (qtdItens == 1) {
 					System.out.println("Preço: " + produto.getPrecoVenda());
 				} else if (qtdItens > 1) {
@@ -482,41 +595,41 @@ public class Main {
 				} else {
 					System.err.println("Quantidade negativa.");
 				}
-			}while(qtdItens <= 0);
+			} while (qtdItens <= 0);
 			preco = qtdItens * produto.getPrecoVenda();
-			total = total + preco;
-			
+			totalBruto = totalBruto + preco;
+
 			quantidade = produto.getQtde_estoque() - qtdItens;
 			if (quantidade >= 0) {
 				produto.setQtde_estoque(quantidade);
-				ListProdutosVendidos.add(new ProdutoVendido(ListVendas.size() + 1, codProd, codPessoaselecionada, qtdItens));
+				ListProdutosVendidos
+						.add(new ProdutoVendido(pegaMaxIdVenda() + 1, codProd, codPessoaselecionada, qtdItens));
 			} else {
 				System.err.println("Não existe essa quantidade no estoque, abasteça o seu estoque.");
 			}
-			
+
 		} while (perguntaSimNao("Deseja acrescentar mais algum produto? \n1 - sim. \n2 - não.", "Informação inválida"));
-		
+
 		do {
 			desconto = numeroDouble("Informe o Desconto em porcentagem: ", "Informação incorreta");
-			System.out.println("O desconto foi de: " +  desconto + "%" );
-		
+			System.out.println("O desconto foi de: " + desconto + "%");
+
 			if (desconto == 0) {
 				precoDesc = 0;
 				System.out.println("Não houve desconto.");
-			} 
-			else if(desconto < 0) {
+			} else if (desconto < 0) {
 				System.err.println("Desconto negativo invalido");
-			}
-			else {
+			} else {
 				precoDesc = (desconto / 100);
-				precoTotalDesc = (1 - precoDesc) * total;
-				strPrecoTotal = converterDoubleStr(precoTotalDesc);
-				System.out.println("Total com desconto: " + strPrecoTotal);
+				precoTotalDesc = (1 - precoDesc) * totalBruto;
+				strPrecoTotalLiquido = converterDoubleStr(precoTotalDesc);
+				System.out.println("Total com desconto: " + strPrecoTotalLiquido);
 			}
-			
-		}while(desconto < 0);
-	
-		venda = new Venda((total - precoDesc), precoDesc, tipoCliente, ListVendas.size() + 1, "", ListProdutosVendidos);
+
+		} while (desconto < 0);
+		double descPorc = totalBruto - precoTotalDesc;
+		venda = new Venda(totalBruto, precoTotalDesc, descPorc, codPessoaselecionada, pegaMaxIdVenda() + 1, "",
+				ListProdutosVendidos);
 		return venda;
 	}
 
@@ -591,13 +704,14 @@ public class Main {
 
 		return produto;
 	}
+
 	public static String converterDoubleStr(double precoDouble) {
-	    /*Transformando um double em 2 casas decimais*/
-	    DecimalFormat fmt = new DecimalFormat("0.00");   //limita o número de casas decimais    
-	    String string = fmt.format(precoDouble);
-	    String[] part = string.split("[,]");
-	    String preco = part[0]+"."+part[1];
-	    return preco;
+		/* Transformando um double em 2 casas decimais */
+		DecimalFormat fmt = new DecimalFormat("0.00"); // limita o número de casas decimais
+		String string = fmt.format(precoDouble);
+		String[] part = string.split("[,]");
+		String preco = part[0] + "." + part[1];
+		return preco;
 	}
 
 	static public Categoria cadastrarCategoria(ArrayList<Categoria> ListCategorias) {
@@ -608,7 +722,8 @@ public class Main {
 
 	}
 
-	static public PessoaFisica cadastrarPessoaFisica(ArrayList<PessoaFisica> ListPessoaFisica, ArrayList<PessoaJuridica> ListPessoaJuridica) {
+	static public PessoaFisica cadastrarPessoaFisica(ArrayList<PessoaFisica> ListPessoaFisica,
+			ArrayList<PessoaJuridica> ListPessoaJuridica) {
 		String nome, rua, cep, bairro, complemento, cidade, estado, email, telefone, celular, cpf;
 
 		nome = receberStrNaoNula("Informe o nome: ", "Informação inválida.");
@@ -625,8 +740,8 @@ public class Main {
 		cpf = digitarStrApenasNumero("Informe o seu CPF: ", "Número do celular inválido");
 
 		Endereco endereco = new Endereco(rua, cep, bairro, intnum, complemento, cidade, estado);
-		PessoaFisica pessoaFisica = new PessoaFisica(ListPessoaFisica.size()  + ListPessoaJuridica.size() +1, endereco, nome, email, telefone,
-				celular, cpf);
+		PessoaFisica pessoaFisica = new PessoaFisica(ListPessoaFisica.size() + ListPessoaJuridica.size() + 1, endereco,
+				nome, email, telefone, celular, cpf);
 		return pessoaFisica;
 
 	}
@@ -712,7 +827,8 @@ public class Main {
 		return dbdigitado;
 	}
 
-	static public PessoaJuridica cadastrarPessoaJuridica(ArrayList<PessoaJuridica> ListPessoaJuridica, ArrayList<PessoaFisica> ListPessoaFisica) {
+	static public PessoaJuridica cadastrarPessoaJuridica(ArrayList<PessoaJuridica> ListPessoaJuridica,
+			ArrayList<PessoaFisica> ListPessoaFisica) {
 
 		boolean tudoOk;
 		String nome, rua, strnum, cep, bairro, complemento, cidade, estado, email, telefone, celular, cnpj;
@@ -732,8 +848,8 @@ public class Main {
 		cnpj = digitarStrApenasNumero("Informe o CNPJ: ", "Número do CNPJ inválido.");
 
 		Endereco endereco = new Endereco(rua, cep, bairro, intnum, complemento, cidade, estado);
-		PessoaJuridica pessoaJuridica = new PessoaJuridica(ListPessoaJuridica.size() + ListPessoaFisica.size()+ 1, endereco, nome, email,
-				telefone, celular, cnpj);
+		PessoaJuridica pessoaJuridica = new PessoaJuridica(ListPessoaJuridica.size() + ListPessoaFisica.size() + 1,
+				endereco, nome, email, telefone, celular, cnpj);
 		return pessoaJuridica;
 
 	}
@@ -1131,6 +1247,7 @@ public class Main {
 						complementoEnde = receberStrNaoNula("Informe o complemento: ", "Informação inválida.");
 						enderecoAux.setComplemento(complementoEnde);
 					}
+					pessoaFisicaSelecionada.setEndereco(enderecoAux);
 				} while (perguntaSimNao("Deseja alterar mais coisas? \n1 - sim. \n2 - não.", "Informação inválida."));
 			} else if (numFis == 3) {
 				String novoEmail;
@@ -1301,6 +1418,7 @@ public class Main {
 						complementoFornecedor = receberStrNaoNula("Informe o complemento: ", "Informação inválida");
 						enderecoAuxrFornecedor.setComplemento(complementoFornecedor);
 					}
+					fornecedorSelecionado.setEndereco(enderecoAuxrFornecedor);
 				} while (perguntaSimNao("Deseja alterar mais coisas? \n1 - sim. \n2 - não.", "Informação inválida"));
 			} else if (numFornecedor == 3) {
 				String emailFornecedor;
