@@ -19,7 +19,7 @@ public class Main {
 		ArrayList<Produto> ListProdutos; // ok
 		ArrayList<PessoaFisica> ListPessoaFisica; // ok
 		ArrayList<PessoaJuridica> ListPessoaJuridica; // ok
-		ArrayList<Venda> ListVendas; //ok
+		ArrayList<Venda> ListVendas; // ok
 
 		try {
 			ListCategorias = InicializaListCategorias();
@@ -51,11 +51,11 @@ public class Main {
 		} catch (Exception e) {
 			ListPessoaJuridica = new ArrayList<>();
 		}
-		//try {
-		//	ListVendas = InicializaVenda();
-		//} catch (Exception e) {
-			ListVendas = new ArrayList<>();
-		//}
+		// try {
+		// ListVendas = InicializaVenda();
+		// } catch (Exception e) {
+		ListVendas = new ArrayList<>();
+		// }
 
 		Usuario usuario = new Usuario();
 		String novoUsuario = "a";
@@ -94,8 +94,6 @@ public class Main {
 
 						int opcao2 = 0;
 						String stropcao2;
-						System.out.println(
-								"É necessário ter pelo menos uma categoria e um fornecedor cadastrado para usufruir de cadastro de produtos.");
 						stropcao2 = receberStrNaoNula(
 								"1 - Listagem de produtos.\n2 - Inserção de produtos. \n3 - Alteração de produtos.",
 								"Informação inválida.");
@@ -146,7 +144,7 @@ public class Main {
 						int opcao4 = 0;
 						String stropcao4;
 						stropcao4 = receberStrNaoNula(
-								"1 - Cadastrar pessoa física." + "\n2 - Cadastrar pessoa jurídica",
+								"1 - Pessoa física." + "\n2 - Pessoa jurídica",
 								"Informação inválida.");
 						try {
 							opcao4 = Integer.parseInt(stropcao4);
@@ -245,37 +243,42 @@ public class Main {
 			}
 		} while (opcao != 0);
 	}
+
 	static public void relatorioVendasData() {
 		int anoInicial, mesInicial, diaInicial;
 		int anoFinal, mesFinal, diaFinal;
 		boolean dataOk = true;
 		do {
 			dataOk = true;
-			anoInicial = digitarNumero("Ano Inicio","Informação inválida");
-			mesInicial = digitarNumero("Mes Inicio","Informação inválida");
-			diaInicial = digitarNumero("Dia Inicio","Informação inválida");
-			
-			anoFinal = digitarNumero("Ano Final","Informação inválida");
-			mesFinal = digitarNumero("Mes Final","Informação inválida");
-			diaFinal = digitarNumero("Dia Final","Informação inválida");
-			
-			if(anoInicial > anoFinal)
-				dataOk=false;
-			else
-				if(mesInicial > mesFinal)
-					dataOk = false;
-				else 
-					if(diaInicial > diaFinal)
-						dataOk = false;
-		}while(!dataOk);
-		
+			anoInicial = digitarNumero("Ano Inicio", "Informação inválida");
+			mesInicial = digitarNumero("Mes Inicio", "Informação inválida");
+			diaInicial = digitarNumero("Dia Inicio", "Informação inválida");
+
+			anoFinal = digitarNumero("Ano Final", "Informação inválida");
+			mesFinal = digitarNumero("Mes Final", "Informação inválida");
+			diaFinal = digitarNumero("Dia Final", "Informação inválida");
+
+			if (anoInicial > anoFinal) {
+				System.out.println("Ano inicial maior que ano final.");
+				dataOk = false;
+			}
+			else if ((anoInicial == anoFinal) && (mesInicial > mesFinal)) {
+				System.out.println("Data inicial maior que data final.");
+				dataOk = false;
+			}
+			else if ((anoInicial == anoFinal) && (mesInicial == mesFinal) && (diaInicial > diaFinal)) {
+				System.out.println("Data inicial maior que data final.");
+
+				dataOk = false;
+			}
+		} while (!dataOk);
+
 		try {
 			Connection connection = ConectaBanco.criarConexao();
-			PreparedStatement statement = connection.prepareStatement("select * from venda where momentocompra between '"
-			+anoInicial+"-"+mesInicial+"-"+diaInicial+
-			"' and '"
-			+anoFinal+"-"+mesFinal+"-"+diaFinal+
-			"' order by id_comprador, id_venda;");
+			PreparedStatement statement = connection
+					.prepareStatement("select * from venda where momentocompra between '" + anoInicial + "-"
+							+ mesInicial + "-" + diaInicial + "' and '" + anoFinal + "-" + mesFinal + "-" + diaFinal
+							+ "' order by id_comprador, id_venda;");
 			ResultSet resultSet = statement.executeQuery();
 			while (resultSet.next()) {
 				System.out.println("Id Comprador = " + resultSet.getInt("id_comprador"));
@@ -290,11 +293,12 @@ public class Main {
 		} catch (Exception e) {
 			System.out.println("Datas incorretas.");
 		}
-		
-		
+
 	}
-	static public void comprasCliente(ArrayList<PessoaFisica> ListPessoaFisica, ArrayList<PessoaJuridica> ListPessoaJuridica) {
-		int tipoCliente = 0, codPessoaFisica =0, codPessoaJuridica=0, codPessoaselecionada = 0;
+
+	static public void comprasCliente(ArrayList<PessoaFisica> ListPessoaFisica,
+			ArrayList<PessoaJuridica> ListPessoaJuridica) {
+		int tipoCliente = 0, codPessoaFisica = 0, codPessoaJuridica = 0, codPessoaselecionada = 0;
 
 		do {
 			tipoCliente = digitarNumero("Informe o tipo de cliente: \n1 - Físico \n2 - Jurídico: \n",
@@ -316,10 +320,11 @@ public class Main {
 			} while (!confirmarPessoaJuridica(ListPessoaJuridica, codPessoaJuridica));
 			codPessoaselecionada = codPessoaJuridica;
 		}
-		
+
 		try {
 			Connection connection = ConectaBanco.criarConexao();
-			PreparedStatement statement = connection.prepareStatement("SELECT * FROM Venda where id_comprador = " + codPessoaselecionada);
+			PreparedStatement statement = connection
+					.prepareStatement("SELECT * FROM Venda where id_comprador = " + codPessoaselecionada);
 			ResultSet resultSet = statement.executeQuery();
 			while (resultSet.next()) {
 				System.out.println("Id Venda = " + resultSet.getInt("id_venda"));
@@ -333,7 +338,7 @@ public class Main {
 		} catch (Exception e) {
 			System.out.println("Não há vendas salvas.");
 		}
-		
+
 	}
 
 	static public ArrayList<PessoaJuridica> InicializaPessoaJuridica() throws SQLException {
@@ -514,12 +519,12 @@ public class Main {
 
 		return ListFornecedores;
 	}
+
 	static private int pegaMaxIdVenda() {
 		int idvenda = 0;
 		try {
 			Connection connection = ConectaBanco.criarConexao();
-			PreparedStatement statement = connection
-					.prepareStatement("select max(id_venda) from venda;");
+			PreparedStatement statement = connection.prepareStatement("select max(id_venda) from venda;");
 			ResultSet resultSet = statement.executeQuery();
 			while (resultSet.next()) {
 				idvenda = resultSet.getInt("max");
@@ -528,10 +533,10 @@ public class Main {
 		} catch (Exception e) {
 			System.out.println("Não há tabela venda salvas.");
 		}
-		
+
 		return idvenda;
 	}
-	
+
 	static private Venda efetuarVendas(ArrayList<Produto> ListProdutos, ArrayList<Categoria> ListCategorias,
 			ArrayList<PessoaFisica> ListPessoaFisica, ArrayList<PessoaJuridica> ListPessoaJuridica,
 			ArrayList<Venda> ListVendas) {
